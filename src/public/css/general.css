@@ -1,0 +1,152 @@
+:root {
+  --base-color: white;
+  --accent-color: #608bc1;
+  --input-color: #cbdceb;
+  --text-color: #133e87;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: Montserrat, sans-serif;
+  font-size: 12pt;
+  color: var(--text-color);
+  text-align: center;
+}
+
+#myVideo {
+  width: 100vw; /* Set the width to 100% of the viewport width */
+  height: 100vh; /* Set the height to 100% of the viewport height */
+  object-fit: cover; /* Ensure the video covers the entire area without distortion */
+  /*display: block;  Ensure no extra spacing is added (default inline element spacing) */
+  position: absolute; /* Allow positioning relative to the viewport */
+  top: 50%; /* Center vertically  */
+  left: 50%; /* Center horizontally  */
+  transform: translate(
+    -50%,
+    -50%
+  ); /* Adjust the position back by 50% to perfectly center */
+  z-index: -1;
+}
+
+body {
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.wrapper {
+  border-radius: 0 20px 20px 0;
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  width: max(50%, 500px);
+  height: 100vh;
+  padding: 12px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+h1 {
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+form {
+  width: min(400px, 100%);
+  margin-top: 20px;
+  margin-bottom: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+form > div {
+  /* background-color: black; */
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+form label {
+  flex-shrink: 0;
+  height: 50px;
+  width: 50px;
+  fill: var(--base-color);
+  background-color: var(--accent-color);
+  border-radius: 10px 0 0 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+form input {
+  box-sizing: border-box;
+  flex-grow: 1;
+  padding: 1em;
+  min-width: 0;
+  height: 50px;
+  border-radius: 0 10px 10px 0;
+  border: 2px solid var(--input-color);
+  background-color: var(--input-color);
+  border-left: none;
+  font: inherit;
+  transition: 0.15s ease;
+}
+
+form input:hover {
+  border-color: var(--accent-color);
+}
+
+form input:focus {
+  outline: none;
+  border-color: var(--text-color);
+}
+
+div:has(input:focus) > label {
+  background-color: var(--text-color);
+}
+
+form button {
+  font: inherit;
+  font-weight: 500;
+  margin-top: 10px;
+  padding: 0.85em 4.5em;
+  border: none;
+  border-radius: 1000px;
+  background-color: var(--text-color);
+  color: var(--input-color);
+  transition: 0.15s ease;
+  cursor: pointer;
+}
+
+form button:hover {
+  background-color: var(--input-color);
+  color: var(--text-color);
+}
+
+a {
+  text-decoration: none;
+  color: var(--accent-color);
+}
+
+a:hover {
+  text-decoration: underline;
+  color: var(--text-color);
+}
+
+@media (max-width: 500px) {
+  .wrapper {
+    width: min(500px, 100%);
+    border-radius: 0;
+  }
+}
+
+#error {
+  color: red;
+}

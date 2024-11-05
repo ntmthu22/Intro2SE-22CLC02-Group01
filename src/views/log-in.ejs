@@ -1,0 +1,31 @@
+<%- include('./includes/head.ejs') %>
+<div class="wrapper">
+  <h1>Log In</h1>
+  <form action="/login" method="POST">
+    <div>
+      <label for="username"> <%- include('./icons/person.svg') %> </label>
+      <input
+        type="text"
+        id="username"
+        name="username"
+        placeholder="Username"
+        value="<%= username || '' %>"
+        required
+      />
+    </div>
+    <div>
+      <label for="password"> <%- include('./icons/lock.svg') %> </label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Password"
+        required
+      />
+    </div>
+    <%- include('./includes/error-message.ejs') %>
+    <button type="submit">Log In</button>
+  </form>
+  <p>Haven't got an account? <a href="/signup" id="signup-link">Sign up</a></p>
+</div>
+<%- include('./includes/end.ejs') %>
