@@ -1,0 +1,54 @@
+<%- include('../includes/head.ejs') %>
+<div class="wrapper">
+  <h1>Sign Up</h1>
+  <form action="/signup" method="POST">
+    <div>
+      <label for="name"> <%- include('../icons/person.svg') %> </label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        value="<%= oldInput.name %>"
+        placeholder="Full Name"
+        required
+      />
+    </div>
+    <div>
+      <label for="email"> <%- include('../icons/mail.svg') %> </label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        value="<%= oldInput.email %>"
+        placeholder="Email"
+        required
+      />
+    </div>
+    <div>
+      <label for="password"> <%- include('../icons/lock.svg') %> </label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Password"
+        required
+      />
+    </div>
+    <div>
+      <label for="password-confirmation">
+        <%- include('../icons/lock.svg') %>
+      </label>
+      <input
+        type="password"
+        id="password-confirmation"
+        name="passwordConfirmation"
+        placeholder="Confirm password"
+        required
+      />
+    </div>
+    <%- include('../includes/error-message.ejs') %>
+    <button type="submit">Sign Up</button>
+  </form>
+  <p>Already have an account? <a href="/login" id="login-link">Log in</a></p>
+</div>
+<%- include('../includes/end.ejs') %>

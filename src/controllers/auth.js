@@ -2,79 +2,102 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 
 exports.getLogin = (req, res) => {
-  if (req.session.isLoggedin) {
-    res.redirect('/');
+  let message = req.flash("error");
+  if (message.length > 0) {
+    message = message[0];
   } else {
-    res.render("log-in", {
-      pageTitle: "Login",
-      errorMessage: null,
-      username: "",
-    });
+    message = null;
   }
+  const email = req.query.email || "";
+  res.render("auth/log-in", {
+    path: "/login",
+    pageTitle: "Login",
+    errorMessage: message,
+    oldInput: { email: email },
+  });
 };
 
 exports.getSignup = (req, res) => {
-  if (req.session.isLoggedin) {
-    res.redirect('/');
+  let message = req.flash("error");
+  if (message.length > 0) {
+    message = message[0];
   } else {
-    res.render("sign-up", {
-      pageTitle: "Signup",
-      errorMessage: null,
-    });
+    message = null;
   }
+
+  const name = req.query.name || "";
+  const email = req.query.email || "";
+
+  res.render("auth/sign-up", {
+    path: "/signup",
+    pageTitle: "Signup",
+    errorMessage: message,
+    oldInput: {
+      name: name,
+      email: email,
+    },
+  });
 };
 
 exports.postSignup = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { name, email, password, passwordConfirmation } = req.body;
 
-  try {
-    const user = await User.findOne({ username });
-
-    if (user) {
-      // Flash the error message and return early to prevent further code execution
-      req.flash("error", "User already exists!");
-      return res.render("sign-up", {
-        pageTitle: "Signup",
-        errorMessage: req.flash("error"),
-      });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ username, email, password: hashedPassword });
-
-    await newUser.save();
-    res.redirect("/login");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
+  User.findOne({ email: email })
+    .then((userDoc) => {
+      if (userDoc) {
+        req.flash("error", "Email already exists!");
+        return res.redirect(`/signup?name=${encodeURIComponent(name)}`);
+      }
+      if (password !== passwordConfirmation) {
+        req.flash("error", "Password does not match!");
+        return res.redirect(
+          `/signup?name=${encodeURIComponent(name)}&email=${encodeURIComponent(
+            email
+          )}`
+        );
+      }
+      return bcrypt
+        .hash(password, 12)
+        .then((hashedPassword) => {
+          const user = new User({
+            name: name,
+            email: email,
+            password: hashedPassword,
+          });
+          return user.save();
+        })
+        .then(() => {
+          res.redirect("/login");
+        })
+        .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
 };
 
 exports.postLogin = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
-  const user = await User.findOne({ username });
-
-  if (user) {
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (isMatch) {
-      req.session.isLoggedin = true;
-      res.redirect("/");
-    } else {
-      req.flash("error", "Incorrect password! Please try again.");
-      res.render("log-in", {
-        pageTitle: "Login",
-        errorMessage: req.flash("error"),
-        username,
-      });
-    }
-  } else {
-    req.flash("error", "Username not found!");
-    res.render("log-in", {
-      pageTitle: "Login",
-      errorMessage: req.flash("error"),
-      username: "",
-    });
-  }
+  User.findOne({ email: email })
+    .then((user) => {
+      if (!user) {
+        req.flash("error", "User not found!");
+        return res.redirect("/login");
+      }
+      bcrypt
+        .compare(password, user.password)
+        .then((isMatch) => {
+          if (isMatch) {
+            req.session.isLoggedIn = true;
+            req.session.user = user;
+            return req.session.save((err) => {
+              console.log(err);
+              res.redirect("/");
+            });
+          }
+          req.flash("error", "Password is not correct. Please try again!");
+          return res.redirect(`/login?email=${encodeURIComponent(email)}`);
+        })
+        .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
 };

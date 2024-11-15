@@ -1,7 +1,7 @@
+exports.getSlash = (req, res, next) => {
+  res.redirect("/dashboard");
+};
+
 exports.getDashboard = (req, res) => {
-  if (req.session.isLoggedin) {
-    res.render("dashboard", { pageTitle: "Dashboard" });
-  } else {
-    res.redirect("/login");
-  }
+  res.render("dashboard", { pageTitle: "Dashboard" });
 };
