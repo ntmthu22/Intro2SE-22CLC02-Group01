@@ -6,8 +6,12 @@ const router = express.Router();
 
 const isAuth = require("../middlewares/is-auth");
 
-router.get("/", privateController.getSlash);
+router.get("/", privateController.getIndex);
 
-router.get("/dashboard", isAuth, privateController.getDashboard);
+router.get("/features", privateController.getFeatures);
+
+router.get("/testimonials", privateController.getTestimonials);
+
+router.get("/about-us", privateController.getAboutUs);
 
 module.exports = router;

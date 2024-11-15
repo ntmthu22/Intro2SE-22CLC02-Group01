@@ -1,4 +1,4 @@
-<%- include('../includes/head.ejs') %>
+<%- include('../includes/auth/head.ejs') %>
 <div class="wrapper">
   <h1>Sign Up</h1>
   <form action="/signup" method="POST">
@@ -46,9 +46,9 @@
         required
       />
     </div>
-    <%- include('../includes/error-message.ejs') %>
+    <%- include('../includes/auth/error-message.ejs') %>
     <button type="submit">Sign Up</button>
   </form>
   <p>Already have an account? <a href="/login" id="login-link">Log in</a></p>
 </div>
-<%- include('../includes/end.ejs') %>
+<%- include('../includes/auth/end.ejs') %>
