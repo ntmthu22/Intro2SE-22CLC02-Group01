@@ -35,7 +35,8 @@
         required
       />
     </div>
-    <%- include('../includes/auth/error-message.ejs') %>
+    <%- include('../includes/auth/success-message.ejs') %> <%-
+    include('../includes/auth/error-message.ejs') %>
     <button type="submit">Log In</button>
   </form>
   <p>Haven't got an account? <a href="/signup" id="signup-link">Sign up</a></p>

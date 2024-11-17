@@ -1,8 +1,8 @@
 :root {
   --base-color: white;
-  --accent-color: #608bc1;
-  --input-color: #cbdceb;
-  --text-color: #133e87;
+  --accent-color: #323232;
+  --input-color: #eeeeee;
+  --text-color: rgb(33, 37, 41);
 }
 
 * {
@@ -17,32 +17,34 @@ html {
   text-align: center;
 }
 
-#myVideo {
-  width: 100vw; /* Set the width to 100% of the viewport width */
-  height: 100vh; /* Set the height to 100% of the viewport height */
-  object-fit: cover; /* Ensure the video covers the entire area without distortion */
-  /*display: block;  Ensure no extra spacing is added (default inline element spacing) */
-  position: absolute; /* Allow positioning relative to the viewport */
-  top: 50%; /* Center vertically  */
-  left: 50%; /* Center horizontally  */
+/* #myVideo {
+  width: 100vw; 
+  height: 100vh;
+  object-fit: cover;
+  position: absolute;
+  top: 50%;
+  left: 50%;
   transform: translate(
     -50%,
     -50%
-  ); /* Adjust the position back by 50% to perfectly center */
+  );
   z-index: -1;
-}
+} */
 
 body {
   min-height: 100vh;
   overflow: hidden;
+  background-color: var(--accent-color);
+  display: flex;
 }
 
 .wrapper {
-  border-radius: 0 20px 20px 0;
-  background-color: rgba(255, 255, 255, 0.6);
+  margin: auto;
+  border-radius: 20px;
+  background-color: rgb(255, 255, 255);
   backdrop-filter: blur(10px);
   width: max(50%, 500px);
-  height: 100vh;
+  height: 90vh;
   padding: 12px;
   box-sizing: border-box;
   display: flex;
@@ -148,11 +150,20 @@ a:hover {
   .wrapper {
     width: min(500px, 100%);
     border-radius: 0;
+    height: 100vh;
   }
 }
 
 .error-message {
   color: #ff2929;
+}
+
+.success-message {
+  color: #47663b;
+}
+
+.hidden {
+  display: none;
 }
 
 form input.invalid {
@@ -161,4 +172,9 @@ form input.invalid {
 
 form label.invalid {
   background-color: #ff2929;
+}
+
+#signup-link,
+#login-link {
+  color: rgb(0, 123, 255);
 }

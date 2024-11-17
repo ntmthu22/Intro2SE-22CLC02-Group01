@@ -21,7 +21,8 @@ router.post(
         if (!userDoc) {
           return Promise.reject("No user found with this Email");
         }
-      }),
+      })
+      .normalizeEmail(),
   ],
   authController.postLogin
 );
@@ -40,20 +41,24 @@ router.post(
         if (userDoc) {
           return Promise.reject("Email already exists!");
         }
-      }),
+      })
+      .normalizeEmail(),
     body("password")
       .isLength({ min: 10 })
       .withMessage("Password must be 10 characters long!")
       .matches(/[A-Z]/)
       .withMessage("Password must contain at least one uppercase letter!")
       .matches(/[!@#$%^&*(),.?":{}|<>]/)
-      .withMessage("Password must contain at least one special charac†er!"),
-    body("confirmPassword").custom(async (value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error("Passwords have to match!");
-      }
-      return true;
-    }),
+      .withMessage("Password must contain at least one special charac†er!")
+      .trim(),
+    body("confirmPassword")
+      .trim()
+      .custom(async (value, { req }) => {
+        if (value !== req.body.password) {
+          throw new Error("Passwords have to match!");
+        }
+        return true;
+      }),
   ],
   authController.postSignup
 );
