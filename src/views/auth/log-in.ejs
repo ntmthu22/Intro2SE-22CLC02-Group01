@@ -3,8 +3,14 @@
   <h1>Log In</h1>
   <form action="/login" method="POST">
     <div>
-      <label for="email"> <%- include('../icons/mail.svg') %> </label>
+      <label
+        class="<%= validationErrors.find(e => e.path === 'email') ? 'invalid' : '' %>"
+        for="email"
+      >
+        <%- include('../icons/mail.svg') %>
+      </label>
       <input
+        class="<%= validationErrors.find(e => e.path === 'email') ? 'invalid' : '' %>"
         type="email"
         id="email"
         name="email"
@@ -14,8 +20,14 @@
       />
     </div>
     <div>
-      <label for="password"> <%- include('../icons/lock.svg') %> </label>
+      <label
+        class="<%= validationErrors.find(e => e.path === 'password') ? 'invalid' : '' %>"
+        for="password"
+      >
+        <%- include('../icons/lock.svg') %>
+      </label>
       <input
+        class="<%= validationErrors.find(e => e.path === 'password') ? 'invalid' : '' %>"
         type="password"
         id="password"
         name="password"

@@ -112,6 +112,10 @@ div:has(input:focus) > label {
   background-color: var(--text-color);
 }
 
+div:has(input:focus) > label.invalid {
+  background-color: #ff2929;
+}
+
 form button {
   font: inherit;
   font-weight: 500;
@@ -148,5 +152,13 @@ a:hover {
 }
 
 .error-message {
-  color: red;
+  color: #ff2929;
+}
+
+form input.invalid {
+  border-color: #ff2929;
+}
+
+form label.invalid {
+  background-color: #ff2929;
 }
