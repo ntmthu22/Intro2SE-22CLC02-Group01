@@ -10,6 +10,11 @@
   </button>
   <div class="collapse navbar-collapse" id="collapsibleNavbar">
     <ul class="navbar-nav ml-auto">
+      <% if (isAuthenticated) { %>
+      <li class="nav-item <%= path === '/generate' ? 'active' : '' %>">
+        <a class="nav-link" href="/generate">START GENERATING</a>
+      </li>
+      <% } %>
       <li class="nav-item <%= path === '/features' ? 'active' : '' %>">
         <a class="nav-link" href="/features">FEATURES</a>
       </li>
@@ -19,9 +24,23 @@
       <li class="nav-item <%= path === '/about-us' ? 'active' : '' %>">
         <a class="nav-link" href="/about-us">ABOUT US</a>
       </li>
-      <li class="nav-item ">
+      <% if (!isAuthenticated) { %>
+      <li class="nav-item">
         <a class="nav-link" href="/login">JOIN NOW</a>
       </li>
+      <% } else { %>
+      <li class="nav-item">
+        <form action="/logout" method="POST" id="logout-form">
+          <button
+            class="nav-link"
+            style="border: none; background: none"
+            type="submit"
+          >
+            LOG OUT
+          </button>
+        </form>
+      </li>
+      <% } %>
     </ul>
   </div>
 </nav>
