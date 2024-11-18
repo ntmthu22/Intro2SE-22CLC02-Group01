@@ -1,0 +1,68 @@
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  <a class="navbar-brand" href="/">PIC2MODEL</a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#collapsibleNavbar"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="collapsibleNavbar">
+    <ul class="navbar-nav ml-auto">
+      <% if (isAuthenticated) { %>
+      <li class="nav-item <%= path === '/generate' ? 'active' : '' %>">
+        <a class="nav-link" href="/generate">START GENERATING</a>
+      </li>
+      <% } %>
+      <li class="nav-item <%= path === '/features' ? 'active' : '' %>">
+        <a class="nav-link" href="/features">FEATURES</a>
+      </li>
+      <li class="nav-item <%= path === '/testimonials' ? 'active' : '' %>">
+        <a class="nav-link" href="/testimonials">TESTIMONIALS</a>
+      </li>
+      <li class="nav-item <%= path === '/about-us' ? 'active' : '' %>">
+        <a class="nav-link" href="/about-us">ABOUT US</a>
+      </li>
+      <% if (!isAuthenticated) { %>
+      <li class="nav-item">
+        <a class="nav-link" href="/login">JOIN NOW</a>
+      </li>
+      <% } else { %>
+      <!-- Example single danger button -->
+      <div>
+        <button
+          type="button"
+          class="nav-link dropdown-toggle"
+          data-toggle="dropdown"
+          aria-expanded="false"
+          style="border: none; background: none"
+        >
+          PROFILE
+        </button>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="/profile">View profile</a>
+          <a class="dropdown-item" href="/edit-profile">Edit profile</a>
+          <div class="dropdown-divider"></div>
+          <form action="/logout" method="POST" id="logout-form">
+            <button type="submit" style="border: none" class="dropdown-item">
+              Log out
+            </button>
+          </form>
+        </div>
+      </div>
+      <!-- <li class="nav-item">
+        <form action="/logout" method="POST" id="logout-form">
+          <button
+            class="nav-link"
+            style="border: none; background: none"
+            type="submit"
+          >
+            LOG OUT
+          </button>
+        </form>
+      </li> -->
+      <% } %>
+    </ul>
+  </div>
+</nav>

@@ -1,0 +1,44 @@
+<%- include('../includes/auth/head.ejs') %>
+<div class="wrapper">
+  <h1>Log In</h1>
+  <form action="/login" method="POST">
+    <div>
+      <label
+        class="<%= validationErrors.find(e => e.path === 'email') ? 'invalid' : '' %>"
+        for="email"
+      >
+        <%- include('../icons/mail.svg') %>
+      </label>
+      <input
+        class="<%= validationErrors.find(e => e.path === 'email') ? 'invalid' : '' %>"
+        type="email"
+        id="email"
+        name="email"
+        placeholder="Email"
+        value="<%= oldInput.email %>"
+        required
+      />
+    </div>
+    <div>
+      <label
+        class="<%= validationErrors.find(e => e.path === 'password') ? 'invalid' : '' %>"
+        for="password"
+      >
+        <%- include('../icons/lock.svg') %>
+      </label>
+      <input
+        class="<%= validationErrors.find(e => e.path === 'password') ? 'invalid' : '' %>"
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Password"
+        required
+      />
+    </div>
+    <%- include('../includes/auth/success-message.ejs') %> <%-
+    include('../includes/auth/error-message.ejs') %>
+    <button type="submit">Log In</button>
+  </form>
+  <p>Haven't got an account? <a href="/signup" id="signup-link">Sign up</a></p>
+</div>
+<%- include('../includes/auth/end.ejs') %>

@@ -18,3 +18,4 @@
 |  22127113  | Nguyễn Hữu Gia Hiếu  | nhghieu22@clc.fitus.edu.vn |
 |  22127487  | Phạm Trịnh Bảo Tín   | ptbtin22@clc.fitus.edu.vn  |
 |  21127739  | Vũ Minh Phát         | vmphat21@clc.fitus.edu.vn  |
+|  20127672  | Vũ Mạnh Quân         | vmquan20@clc.fitus.edu.vn  |
