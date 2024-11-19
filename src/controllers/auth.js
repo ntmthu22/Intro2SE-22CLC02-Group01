@@ -1,4 +1,5 @@
 const { validationResult } = require("express-validator");
+const crypto = require("crypto");
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
@@ -66,7 +67,27 @@ exports.getSignup = (req, res) => {
   });
 };
 
-exports.postSignup = async (req, res) => {
+exports.getReset = (req, res) => {
+  let message = req.flash("error");
+
+  if (message.length > 0) {
+    message = message[0];
+  } else {
+    message = null;
+  }
+
+  res.render("auth/reset", {
+    path: "/reest",
+    pageTitle: "Reset",
+    errorMessage: message,
+    oldInput: {
+      email: "",
+    },
+    validationErrors: [],
+  });
+};
+
+exports.postSignup = (req, res) => {
   const { name, email, password } = req.body;
   const errors = validationResult(req);
 
@@ -108,7 +129,9 @@ exports.postSignup = async (req, res) => {
             <h1 style="color: #007BFF;">Welcome to PIC2MODEL!</h1>
             <p style="font-size: 16px; color: #333;">Thank you for signing up with us. You're now part of a community that transforms 2D images into stunning 3D objects effortlessly.</p>
             <p style="font-size: 16px; color: #333;">Explore your account and start creating amazing 3D models today!</p>
-            <a href="https://yourwebsite.com/login" style="display: inline-block; margin-top: 20px; padding: 10px 20px; font-size: 16px; color: #ffffff; background-color: #007BFF; text-decoration: none; border-radius: 4px;">Log in now</a>
+            <a href="${req.protocol}://${req.get(
+          "host"
+        )}/login" style="display: inline-block; margin-top: 20px; padding: 10px 20px; font-size: 16px; color: #ffffff; background-color: #007BFF; text-decoration: none; border-radius: 4px;">Log in now</a>
             <p style="margin-top: 30px; font-size: 14px; color: #999;">If you have any questions, feel free to contact us at <a href="mailto:support@pic2model.com" style="color: #007BFF;">support@pic2model.com</a>.</p>
           </div>
         `,
@@ -117,7 +140,7 @@ exports.postSignup = async (req, res) => {
     .catch((err) => console.log(err));
 };
 
-exports.postLogin = async (req, res) => {
+exports.postLogin = (req, res) => {
   const { email, password } = req.body;
 
   const errors = validationResult(req);
@@ -167,9 +190,139 @@ exports.postLogin = async (req, res) => {
     .catch((err) => console.log(err));
 };
 
+exports.postReset = (req, res) => {
+  const email = req.body.email;
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render("auth/reset", {
+      path: "/reset",
+      pageTitle: "Reset",
+      errorMessage: errors.array()[0].msg,
+      oldInput: {
+        email: email,
+      },
+      validationErrors: errors.array(),
+    });
+  }
+
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      console.log(err);
+      return res.redirect("/reset");
+    }
+
+    const token = buffer.toString("hex");
+    User.findOne({ email: email })
+      .then((user) => {
+        user.resetToken = token;
+        user.resetTokenExpiration = Date.now() + 3600000;
+        return user.save();
+      })
+      .then(() => {
+        req.flash("success", "We've sent a reset link to your email account");
+        res.redirect("/login");
+        return transporter.sendMail({
+          to: email,
+          from: "noreply.pic2model@gmail.com",
+          subject: "Password Reset",
+          html: `
+          <p>You requested a password reset</p>
+          <p>Click this <a href='${req.protocol}://${req.get(
+            "host"
+          )}/reset/${token}'>link</a> to set a new password</p>
+          `,
+        });
+      })
+      .catch((err) => console.log(err));
+  });
+};
+
 exports.postLogout = (req, res, next) => {
   req.session.destroy((err) => {
     console.log(err);
     res.redirect("/");
   });
+};
+
+exports.getNewPassword = (req, res, next) => {
+  const token = req.params.token;
+
+  User.findOne({
+    resetToken: token,
+    resetTokenExpiration: { $gt: Date.now() },
+  })
+    .then((user) => {
+      if (!user) {
+        req.flash("error", "Your reset link has expired");
+        return res.redirect("/reset");
+      }
+
+      let message = req.flash("error");
+
+      if (message.length > 0) {
+        message = message[0];
+      } else {
+        message = null;
+      }
+
+      res.render("auth/new-password", {
+        path: "/new-password",
+        pageTitle: "New Password",
+        errorMessage: message,
+        userId: user._id.toString(),
+        oldInput: {
+          password: "",
+        },
+        passwordToken: token,
+        validationErrors: [],
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
+exports.postNewPassword = (req, res, next) => {
+  const newPassword = req.body.password;
+  const userId = req.body.userId;
+  const passwordToken = req.body.passwordToken;
+  let resetUser;
+
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).render("auth/new-password", {
+      path: "/new-password",
+      pageTitle: "New Password",
+      successMessage: "",
+      errorMessage: errors.array()[0].msg,
+      oldInput: {
+        password: newPassword,
+      },
+      passwordToken: passwordToken,
+      validationErrors: errors.array(),
+      userId: userId,
+    });
+  }
+
+  User.findOne({
+    resetToken: passwordToken,
+    resetTokenExpiration: { $gt: Date.now() },
+    _id: userId,
+  })
+    .then((user) => {
+      resetUser = user;
+      return bcrypt.hash(newPassword, 12);
+    })
+    .then((hashedPassword) => {
+      resetUser.password = hashedPassword;
+      resetUser.resetToken = undefined;
+      resetUser.resetTokenExpiration = undefined;
+      return resetUser.save();
+    })
+    .then(() => {
+      req.flash("success", "Your password has been reset!");
+      res.redirect("/login");
+    })
+    .catch((err) => console.log(err));
 };

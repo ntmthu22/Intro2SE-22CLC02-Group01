@@ -74,7 +74,12 @@
     <%- include('../includes/auth/error-message.ejs') %>
     <button type="submit">Sign Up</button>
   </form>
-  <p>Already have an account? <a href="/login" id="login-link">Log in</a></p>
+  <div class="links">
+    <p>
+      Already have an account?
+      <a href="/login" id="login-link" class="link">Log in</a>
+    </p>
+  </div>
 </div>
 
 <%- include('../includes/auth/end.ejs') %>

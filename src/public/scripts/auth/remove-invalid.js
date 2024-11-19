@@ -2,9 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const inputs = document.querySelectorAll("form input");
 
   const errorMessage = document.querySelector(".error-message");
-  console.log(errorMessage);
   const successMessage = document.querySelector(".success-message");
-  console.log(successMessage);
 
   if (errorMessage) {
     setTimeout(() => {

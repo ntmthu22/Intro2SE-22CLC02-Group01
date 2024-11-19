@@ -32,6 +32,7 @@
         id="password"
         name="password"
         placeholder="Password"
+        value="<%= oldInput.password %>"
         required
       />
     </div>
@@ -39,6 +40,17 @@
     include('../includes/auth/error-message.ejs') %>
     <button type="submit">Log In</button>
   </form>
-  <p>Haven't got an account? <a href="/signup" id="signup-link">Sign up</a></p>
+
+  <div class="links">
+    <div>
+      Haven't got an account?
+      <a href="/signup" id="signup-link" class="link">Sign up</a>
+    </div>
+    <div>&vert;</div>
+    <div>
+      Forgot your password?
+      <a href="/reset" id="reset-link" class="link">Reset password</a>
+    </div>
+  </div>
 </div>
 <%- include('../includes/auth/end.ejs') %>

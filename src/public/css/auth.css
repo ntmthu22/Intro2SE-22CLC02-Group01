@@ -39,6 +39,7 @@ body {
 }
 
 .wrapper {
+  position: relative;
   margin: auto;
   border-radius: 20px;
   background-color: rgb(255, 255, 255);
@@ -159,7 +160,7 @@ a:hover {
 }
 
 .success-message {
-  color: #47663b;
+  color: #859f3d;
 }
 
 .hidden {
@@ -174,7 +175,15 @@ form label.invalid {
   background-color: #ff2929;
 }
 
-#signup-link,
-#login-link {
+.link {
   color: rgb(0, 123, 255);
+}
+
+.links {
+  position: absolute;
+  bottom: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5em;
 }
