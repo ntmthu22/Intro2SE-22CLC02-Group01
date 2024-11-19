@@ -4,6 +4,8 @@ const User = require("../models/user");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 const sendgridTransport = require("nodemailer-sendgrid-transport");
+const path = require("path");
+const ejs = require("ejs");
 
 const transporter = nodemailer.createTransport(
   sendgridTransport({
@@ -120,21 +122,24 @@ exports.postSignup = (req, res) => {
     .then(() => {
       req.flash("success", "Sign up successful! Please log in!");
       res.redirect("/login");
-      return transporter.sendMail({
-        to: email,
-        from: "noreply.pic2model@gmail.com",
-        subject: "Sign up completed!",
-        html: `
-          <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; max-width: 600px; margin: auto;">
-            <h1 style="color: #007BFF;">Welcome to PIC2MODEL!</h1>
-            <p style="font-size: 16px; color: #333;">Thank you for signing up with us. You're now part of a community that transforms 2D images into stunning 3D objects effortlessly.</p>
-            <p style="font-size: 16px; color: #333;">Explore your account and start creating amazing 3D models today!</p>
-            <a href="${req.protocol}://${req.get(
-          "host"
-        )}/login" style="display: inline-block; margin-top: 20px; padding: 10px 20px; font-size: 16px; color: #ffffff; background-color: #007BFF; text-decoration: none; border-radius: 4px;">Log in now</a>
-            <p style="margin-top: 30px; font-size: 14px; color: #999;">If you have any questions, feel free to contact us at <a href="mailto:support@pic2model.com" style="color: #007BFF;">support@pic2model.com</a>.</p>
-          </div>
-        `,
+
+      const templatePath = path.join(
+        __dirname,
+        "../views/emails/welcome-email.ejs"
+      );
+      const loginLink = `${req.protocol}://${req.get("host")}/login`;
+
+      ejs.renderFile(templatePath, { loginLink }, (err, htmlContent) => {
+        if (err) {
+          console.log(err);
+          return;
+        }
+        return transporter.sendMail({
+          to: email,
+          from: "noreply.pic2model@gmail.com",
+          subject: "Sign up completed!",
+          html: htmlContent,
+        });
       });
     })
     .catch((err) => console.log(err));
@@ -223,16 +228,25 @@ exports.postReset = (req, res) => {
       .then(() => {
         req.flash("success", "We've sent a reset link to your email account");
         res.redirect("/login");
-        return transporter.sendMail({
-          to: email,
-          from: "noreply.pic2model@gmail.com",
-          subject: "Password Reset",
-          html: `
-          <p>You requested a password reset</p>
-          <p>Click this <a href='${req.protocol}://${req.get(
-            "host"
-          )}/reset/${token}'>link</a> to set a new password</p>
-          `,
+
+        const templatePath = path.join(
+          __dirname,
+          "../views/emails/reset-password-email.ejs"
+        );
+        const resetLink = `${req.protocol}://${req.get("host")}/reset/${token}`;
+
+        ejs.renderFile(templatePath, { resetLink }, (err, htmlContent) => {
+          if (err) {
+            console.log(err);
+            return;
+          }
+
+          return transporter.sendMail({
+            to: email,
+            from: "noreply.pic2model@gmail.com",
+            subject: "Password Reset",
+            html: htmlContent,
+          });
         });
       })
       .catch((err) => console.log(err));
