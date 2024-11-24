@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const authRoutes = require("./routes/auth");
 const generalRoutes = require("./routes/general");
-const privateRoutes = require("./routes/private");
+const userRoutes = require("./routes/user");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const flash = require("connect-flash");
@@ -54,7 +54,7 @@ app.use((req, res, next) => {
 
 app.use(authRoutes);
 app.use(generalRoutes);
-app.use(privateRoutes);
+app.use("/user", userRoutes);
 app.use(errorController.get404);
 
 mongoose

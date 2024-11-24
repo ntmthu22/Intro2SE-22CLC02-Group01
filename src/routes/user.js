@@ -1,6 +1,6 @@
 const express = require("express");
 
-const privateController = require("../controllers/private");
+const userController = require("../controllers/user");
 
 const router = express.Router();
 
@@ -12,11 +12,11 @@ const { body } = require("express-validator");
 
 const User = require("../models/user");
 
-router.get("/profile", isAuth, privateController.getProfile);
+router.get("/profile", isAuth, userController.getProfile);
 
-router.get("/edit-profile", isAuth, privateController.getEditProfile);
+router.get("/edit-profile", isAuth, userController.getEditProfile);
 
-router.get("/edit-profile/name", isAuth, privateController.getEditProfileName);
+router.get("/edit-profile/name", isAuth, userController.getEditProfileName);
 
 router.post(
   "/edit-profile/name",
@@ -28,14 +28,10 @@ router.post(
       .matches(/^[^0-9]*$/)
       .withMessage("Your name shouldn't contain any numbers!"),
   ],
-  privateController.postEditProfileName
+  userController.postEditProfileName
 );
 
-router.get(
-  "/edit-profile/email",
-  isAuth,
-  privateController.getEditProfileEmail
-);
+router.get("/edit-profile/email", isAuth, userController.getEditProfileEmail);
 
 router.post(
   "/edit-profile/email",
@@ -53,13 +49,13 @@ router.post(
       }),
   ],
 
-  privateController.postEditProfileEmail
+  userController.postEditProfileEmail
 );
 
 router.get(
   "/edit-profile/password",
   isAuth,
-  privateController.getEditProfilePassword
+  userController.getEditProfilePassword
 );
 
 router.post(
@@ -98,9 +94,9 @@ router.post(
         return true;
       }),
   ],
-  privateController.postEditProfilePassword
+  userController.postEditProfilePassword
 );
 
-router.get("/generate", isAuth, privateController.getGenerate);
+router.get("/generate", isAuth, userController.getGenerate);
 
 module.exports = router;

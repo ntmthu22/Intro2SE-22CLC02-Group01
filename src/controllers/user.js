@@ -3,9 +3,9 @@ const { validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 
 exports.getProfile = (req, res, next) => {
-  res.render("private/profile", {
+  res.render("user/profile", {
     pageTitle: "Profile",
-    path: "/profile",
+    path: "/user/profile",
     fullName: req.user.name,
     email: req.user.email,
   });
@@ -28,9 +28,9 @@ exports.getEditProfile = (req, res, next) => {
     successMessage = null;
   }
 
-  res.render("private/edit-profile", {
+  res.render("user/edit-profile", {
     pageTitle: "Edit Profile",
-    path: "/edit-profile",
+    path: "/user/edit-profile",
     fullName: req.user.name,
     email: req.user.email,
     successMessage: successMessage,
@@ -39,9 +39,9 @@ exports.getEditProfile = (req, res, next) => {
 };
 
 exports.getEditProfileName = (req, res, next) => {
-  res.render("private/edit-profile-name", {
+  res.render("user/edit-profile-name", {
     pageTitle: "Edit Name",
-    path: "/edit-profile/name",
+    path: "/user/edit-profile/name",
     fullName: req.user.name,
     errorMessage: null,
     validationErrors: [],
@@ -49,9 +49,9 @@ exports.getEditProfileName = (req, res, next) => {
 };
 
 exports.getEditProfileEmail = (req, res, next) => {
-  res.render("private/edit-profile-email", {
+  res.render("user/edit-profile-email", {
     pageTitle: "Edit Email",
-    path: "/edit-profile/email",
+    path: "/user/edit-profile/email",
     email: req.user.email,
     errorMessage: null,
     validationErrors: [],
@@ -64,9 +64,9 @@ exports.postEditProfileName = (req, res) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(422).render("private/edit-profile-name", {
+    return res.status(422).render("user/edit-profile-name", {
       pageTitle: "Edit Name",
-      path: "/edit-profile/name",
+      path: "/user/edit-profile/name",
       fullName: name,
       errorMessage: errors.array()[0].msg,
       validationErrors: errors.array(),
@@ -79,7 +79,7 @@ exports.postEditProfileName = (req, res) => {
     .save()
     .then(() => {
       req.flash("success", "Name changed!");
-      res.redirect("/edit-profile");
+      res.redirect("/user/edit-profile");
     })
     .catch((err) => console.log(err));
 };
@@ -90,9 +90,9 @@ exports.postEditProfileEmail = (req, res) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(422).render("private/edit-profile-email", {
+    return res.status(422).render("user/edit-profile-email", {
       pageTitle: "Edit Email",
-      path: "/edit-profile/email",
+      path: "/user/edit-profile/email",
       email: email,
       errorMessage: errors.array()[0].msg,
       validationErrors: errors.array(),
@@ -105,15 +105,15 @@ exports.postEditProfileEmail = (req, res) => {
     .save()
     .then(() => {
       req.flash("success", "Email changed!");
-      res.redirect("/edit-profile");
+      res.redirect("/user/edit-profile");
     })
     .catch((err) => console.log(err));
 };
 
 exports.getEditProfilePassword = (req, res) => {
-  res.render("private/edit-profile-password", {
+  res.render("user/edit-profile-password", {
     pageTitle: "Edit Password",
-    path: "/edit-profile/password",
+    path: "/user/edit-profile/password",
     oldInput: {
       password: "",
       newPassword: "",
@@ -130,9 +130,9 @@ exports.postEditProfilePassword = async (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    return res.status(422).render("private/edit-profile-password", {
+    return res.status(422).render("user/edit-profile-password", {
       pageTitle: "Edit Password",
-      path: "/edit-profile/password",
+      path: "/user/edit-profile/password",
       oldInput: {
         password: password,
         newPassword: newPassword,
@@ -148,7 +148,7 @@ exports.postEditProfilePassword = async (req, res, next) => {
     req.user.password = newHashedPassword;
     await req.user.save();
     req.flash("success", "Password changed!");
-    res.redirect("/edit-profile");
+    res.redirect("/user/edit-profile");
   } catch (err) {
     console.log(err);
   }
