@@ -16,6 +16,18 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  /* role: {
+    roleName: {
+      type: String,
+      emum: ['user', 'admin'],
+    }
+
+  },
+  membershipType: {
+    type: String,
+    enum: ["free", "premium"],
+    default: "free",
+  }, */
 });
 
 const User = mongoose.model("user", userSchema);

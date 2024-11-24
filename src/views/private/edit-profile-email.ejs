@@ -1,0 +1,53 @@
+<%- include('../includes/general/head.ejs') %>
+</head>
+  <body>
+    <%- include('../includes/general/navbar.ejs') %>
+    
+    <section class="container py-5 d-flex align-items-center justify-content-center">
+      <div class="card position-relative" style="width: 24rem;">
+
+        <a href="/edit-profile" class="position-absolute" style="top:5px;left:5px;background:none;border:none">
+          <%- include('../icons/arrow_left.svg') %>
+        </a>
+        
+        <form class="pt-5 p-3" action="/edit-profile/email" method="POST">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control
+            <%= validationErrors.find(e => e.path === 'email') ? 'is-invalid' : '' %>" id="email" name="email" aria-describedby="emailHelp" value="<%= email %>" placeholder="Enter new email">
+            <small id="emailHelp" class="form-text text-muted"><%= errorMessage ? errorMessage : '' %></small>
+          </div>
+          <button type="submit" disabled class="btn btn-primary btn-lg btn-block">Submit</button>
+        </form>
+      </div>
+    </section>
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const nameInput = document.getElementById('email');
+        const submitButton = document.querySelector('button.btn[type="submit"]');
+        const helper = document.getElementById('emailHelp');
+        
+        const initialValue = nameInput.value;
+        
+        nameInput.addEventListener('input', () => {
+          helper.innerText = '';
+          nameInput.classList.remove('is-invalid');
+          if (nameInput.value.trim() !== initialValue.trim()) {
+            submitButton.disabled = false;
+          } else {
+            submitButton.disabled = true;
+          }
+        });
+
+        submitButton.addEventListener('click', (e) => {
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(nameInput.value.trim())) {
+            helper.innerText = "Please fill in a valid email address.";
+            e.preventDefault();
+            nameInput.classList.add('is-invalid');
+          }
+        })
+      });
+    </script>
+  </body>
+</html>

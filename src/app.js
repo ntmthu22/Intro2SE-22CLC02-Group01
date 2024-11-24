@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const authRoutes = require("./routes/auth");
+const generalRoutes = require("./routes/general");
 const privateRoutes = require("./routes/private");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
@@ -52,6 +53,7 @@ app.use((req, res, next) => {
 });
 
 app.use(authRoutes);
+app.use(generalRoutes);
 app.use(privateRoutes);
 app.use(errorController.get404);
 
