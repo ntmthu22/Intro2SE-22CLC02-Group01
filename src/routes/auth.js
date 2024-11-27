@@ -1,10 +1,10 @@
-const express = require("express");
+import express from "express";
+import authController from "../controllers/auth.js";
+import isNotAuth from "../middlewares/is-not-auth.js";
+import User from "../models/user.js";
+import { check, body } from "express-validator";
 
-const authController = require("../controllers/auth");
 const router = express.Router();
-const isNotAuth = require("../middlewares/is-not-auth");
-const User = require("../models/user");
-const { check, body } = require("express-validator");
 
 router.get("/login", isNotAuth, authController.getLogin);
 
@@ -107,4 +107,4 @@ router.post(
 
 router.post("/logout", authController.postLogout);
 
-module.exports = router;
+export default router;

@@ -6,15 +6,16 @@
     <section class="container py-5 d-flex align-items-center justify-content-center">
       <div class="card position-relative" style="width: 24rem;">
 
-        <a href="/user/edit-profile" class="position-absolute" style="top:5px;left:5px;background:none;border:none">
+        <a href="/<%= user.role %>/edit-profile" class="position-absolute" style="top:5px;left:5px;background:none;border:none">
           <%- include('../icons/arrow_left.svg') %>
         </a>
         
-        <form class="pt-5 p-3" action="/user/edit-profile/email" method="POST">
+        <form class="pt-5 p-3" action="/<%= user.role %>/edit-profile/email" method="POST">
           <div class="form-group">
             <label for="email">Email</label>
+            <input type="hidden" id="originalEmail" value="<%= originalEmail %>">
             <input type="email" class="form-control
-            <%= validationErrors.find(e => e.path === 'email') ? 'is-invalid' : '' %>" id="email" name="email" aria-describedby="emailHelp" value="<%= email %>" placeholder="Enter new email">
+            <%= validationErrors.find(e => e.path === 'email') ? 'is-invalid' : '' %>" id="email" name="email" aria-describedby="emailHelp" value="<%= user.email %>" placeholder="Enter new email">
             <small id="emailHelp" class="form-text text-muted"><%= errorMessage ? errorMessage : '' %></small>
           </div>
           <button type="submit" disabled class="btn btn-primary btn-lg btn-block">Submit</button>
@@ -25,10 +26,11 @@
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const nameInput = document.getElementById('email');
+        const originalEmail = document.getElementById('originalEmail');
         const submitButton = document.querySelector('button.btn[type="submit"]');
         const helper = document.getElementById('emailHelp');
         
-        const initialValue = nameInput.value;
+        const initialValue = originalEmail.value;
         
         nameInput.addEventListener('input', () => {
           helper.innerText = '';

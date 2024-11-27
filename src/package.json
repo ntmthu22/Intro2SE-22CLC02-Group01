@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "nmcnpm",
   "version": "1.0.0",
   "main": "script.js",
@@ -10,6 +11,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "axios": "^1.7.8",
     "bcryptjs": "^2.4.3",
     "connect-flash": "^0.1.1",
     "connect-mongodb-session": "^5.0.0",
@@ -18,11 +20,15 @@
     "ejs": "^3.1.10",
     "express": "^4.21.1",
     "express-validator": "^7.2.0",
+    "fetch-blob": "^4.0.0",
     "mongoose": "^8.7.3",
+    "multer": "^1.4.5-lts.1",
+    "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.16",
     "nodemailer-sendgrid-transport": "^0.2.0"
   },
   "devDependencies": {
+    "@gradio/client": "^1.8.0",
     "express-session": "^1.18.1",
     "nodemon": "^3.1.7"
   }

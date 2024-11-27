@@ -10,11 +10,13 @@
             <div class="card-body text-center">
               <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
                 class="rounded-circle img-fluid" style="width: 150px;">
-              <h5 class="my-3"><%= fullName %></h5>
+              <h5 class="my-3"><%= user.name %></h5>
               <!-- <p class="text-muted mb-1">Full Stack Developer</p> -->
-              <p class="text-muted mb-4">Free Account</p>
+              <p class="text-muted mb-4"><%= user.membershipType %> Account</p>
               <div class="d-flex justify-content-center mb-2">
-                <button type="button" class="btn btn-primary">Upgrade Account</button>
+                <form id="membership-form" method="POST" action="/payment">
+                  <button type="submit" class="btn btn-primary"><%= user.membershipType === 'Free' ? 'Upgrade' : 'Downgrade' %> Account</button>
+                </form>
               </div>
             </div>
           </div>
@@ -27,7 +29,7 @@
                   <p class="mb-0">Full Name</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0"><%= fullName %></p>
+                  <p class="text-muted mb-0"><%= user.name %></p>
                 </div>
               </div>
               <hr>
@@ -36,7 +38,7 @@
                   <p class="mb-0">Email</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0"><%= email %></p>
+                  <p class="text-muted mb-0"><%= user.email %></p>
                 </div>
               </div>
               <hr>
@@ -45,7 +47,7 @@
                   <p class="mb-0">Account Type</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">Free Account</p>
+                  <p class="text-muted mb-0"><%= user.membershipType %> Account</p>
                 </div>
               </div>
               <hr>
@@ -54,7 +56,7 @@
                   <p class="mb-0">Role</p>
                 </div>
                 <div class="col-sm-9">
-                  <p class="text-muted mb-0">User</p>
+                  <p class="text-muted mb-0"><%= user.role %></p>
                 </div>
               </div>
               <hr>

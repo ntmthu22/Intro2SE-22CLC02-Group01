@@ -1,26 +1,19 @@
-const express = require("express");
-
-const userController = require("../controllers/user");
+import express from "express";
+import bcrypt from "bcryptjs";
+import { body } from "express-validator";
+import User from "../models/user.js";
+import userController from "../controllers/user.js";
+import isUser from "../middlewares/is-user.js";
 
 const router = express.Router();
 
-const bcrypt = require("bcryptjs");
-
-const isAuth = require("../middlewares/is-auth");
-
-const { body } = require("express-validator");
-
-const User = require("../models/user");
-
-router.get("/profile", isAuth, userController.getProfile);
-
-router.get("/edit-profile", isAuth, userController.getEditProfile);
-
-router.get("/edit-profile/name", isAuth, userController.getEditProfileName);
+router.get("/profile", isUser, userController.getProfile);
+router.get("/edit-profile", isUser, userController.getEditProfile);
+router.get("/edit-profile/name", isUser, userController.getEditProfileName);
 
 router.post(
   "/edit-profile/name",
-  isAuth,
+  isUser,
   [
     body("name", "Your name shouldn't be too long or too short")
       .trim()
@@ -31,11 +24,11 @@ router.post(
   userController.postEditProfileName
 );
 
-router.get("/edit-profile/email", isAuth, userController.getEditProfileEmail);
+router.get("/edit-profile/email", isUser, userController.getEditProfileEmail);
 
 router.post(
   "/edit-profile/email",
-  isAuth,
+  isUser,
   [
     body("email", "Invalid email!")
       .trim()
@@ -54,13 +47,13 @@ router.post(
 
 router.get(
   "/edit-profile/password",
-  isAuth,
+  isUser,
   userController.getEditProfilePassword
 );
 
 router.post(
   "/edit-profile/password",
-  isAuth,
+  isUser,
   [
     body("password")
       .trim()
@@ -97,6 +90,8 @@ router.post(
   userController.postEditProfilePassword
 );
 
-router.get("/generate", isAuth, userController.getGenerate);
+router.get("/generate", isUser, userController.getGenerate);
 
-module.exports = router;
+router.post("/generate", isUser, userController.postGenerate);
+
+export default router;

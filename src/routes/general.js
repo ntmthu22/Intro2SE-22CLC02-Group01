@@ -1,10 +1,8 @@
-const express = require("express");
+import express from "express";
 
-const generalController = require("../controllers/general");
+import generalController from "../controllers/general.js";
 
 const router = express.Router();
-
-const isAuth = require("../middlewares/is-auth");
 
 router.get("/", generalController.getIndex);
 
@@ -14,4 +12,4 @@ router.get("/testimonials", generalController.getTestimonials);
 
 router.get("/about-us", generalController.getAboutUs);
 
-module.exports = router;
+export default router;
