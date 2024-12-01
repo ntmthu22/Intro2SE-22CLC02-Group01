@@ -3,12 +3,7 @@ export const getCurrentTime = () => {
   return new Date(now.getTime() + 7 * 60 * 60 * 1000).toISOString();
 };
 
-export const extractDateAndName = (filename) => {
-  const filenameWithoutPrefix = filename.slice(7);
-  const [dateString, name] = filenameWithoutPrefix.split("_");
-
-  const date = new Date(dateString);
-
+export const extractDate = (date) => {
   const options = {
     month: "short",
     day: "2-digit",
@@ -18,7 +13,17 @@ export const extractDateAndName = (filename) => {
     hour12: true,
     timeZone: "UTC",
   };
-  const formattedDate = date.toLocaleString("en-US", options);
+
+  return date.toLocaleString("en-US", options);
+};
+
+export const extractDateAndName = (filename) => {
+  const filenameWithoutPrefix = filename.slice(7);
+  const [dateString, name] = filenameWithoutPrefix.split("_");
+
+  const date = new Date(dateString);
+
+  const formattedDate = extractDate(date);
 
   return { date: formattedDate, name };
 };

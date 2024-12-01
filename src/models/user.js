@@ -26,7 +26,9 @@ const userSchema = new mongoose.Schema({
     enum: ["Free", "Premium"],
     default: "Free",
   },
-  validUntil: Date,
+  validUntil: {
+    type: Date,
+  },
 });
 
 userSchema.methods.checkMembershipStatus = async function () {
@@ -34,7 +36,7 @@ userSchema.methods.checkMembershipStatus = async function () {
     const now = new Date();
     if (now > this.validUntil) {
       this.membershipType = "Free";
-      this.validUntil = null;
+      this.validUntil = undefined;
 
       await this.save();
     }
@@ -44,8 +46,9 @@ userSchema.methods.checkMembershipStatus = async function () {
 userSchema.methods.upgradeAccount = async function () {
   if (this.membershipType === "Free") {
     this.membershipType = "Premium";
+
     const oneMonthFromNow = new Date();
-    oneMonthFromNow.setMonth(now.getMonth() + 1);
+    oneMonthFromNow.setMonth(oneMonthFromNow.getMonth() + 1);
 
     this.validUntil = oneMonthFromNow;
 

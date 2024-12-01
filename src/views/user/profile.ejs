@@ -13,11 +13,20 @@
                 <h5 class="my-3"><%= user.name %></h5>
                 <!-- <p class="text-muted mb-1">Full Stack Developer</p> -->
                 <p class="text-muted mb-4"><%= user.membershipType %> Account</p>
-                <div class="d-flex justify-content-center mb-2">
-                  <form id="membership-form" method="POST" action="/<%= user.membershipType === 'Free' ? 'payment' : 'user/downgrade' %>">
-                    <button type="submit" class="btn btn-primary"><%= user.membershipType === 'Free' ? 'Upgrade' : 'Downgrade' %> Account</button>
-                  </form>
+                <% if (user.membershipType === 'Free') { %>
+                <hr>
+                <div class="dropdown">
+                  <button class="btn btn-primary dropdown-toggle btn-lg btn-block" type="button" data-toggle="dropdown" aria-expanded="false">
+                    Upgrade your account
+                  </button>
+                  <div class="dropdown-menu btn-block">
+                    <form class="text-center" id="membership-form" method="POST" action="/payment">
+                      <button type="submit" style="border: none" class="dropdown-item">Via Momo</button>
+                    </form>
+                    <a class="dropdown-item text-center" href="/user/gift-code">Via Giftcode</a>
+                  </div>
                 </div>
+                <% } %>
               </div>
             </div>
           </div>
@@ -44,13 +53,24 @@
                 <hr>
                 <div class="row">
                   <div class="col-sm-3">
-                    <p class="mb-0">Account Type</p>
+                    <p class="mb-0">Account Plan</p>
                   </div>
                   <div class="col-sm-9">
-                    <p class="text-muted mb-0"><%= user.membershipType %> Account</p>
+                    <p class="text-muted mb-0"><%= user.membershipType %></p>
                   </div>
                 </div>
                 <hr>
+                <% if (user.membershipType === 'Premium') { %>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Expiration Date</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0"><%= validUntil %></p>
+                  </div>
+                </div>
+                <hr>
+                <% } %>
                 <div class="row">
                   <div class="col-sm-3">
                     <p class="mb-0">Role</p>

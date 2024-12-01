@@ -4,7 +4,7 @@ import { Client } from "@gradio/client";
 import { Blob } from "buffer"; // Built-in Node.js module for Blob
 import fs from "fs/promises";
 import Product from "../models/product.js";
-import { extractDateAndName } from "../utils/time.js";
+import { extractDate, extractDateAndName } from "../utils/time.js";
 
 const ITEMS_PER_PAGE = 6;
 const PREVIEW_ITEMS = 2;
@@ -22,11 +22,18 @@ const userController = {
           return product;
         });
 
+        let validUntil = undefined;
+
+        if (req.user.membershipType === "Premium") {
+          validUntil = extractDate(req.user.validUntil);
+        }
+
         res.render("user/profile", {
           prods: updatedProducts,
           pageTitle: "Profile",
           path: "/user/profile",
           user: req.user,
+          validUntil: validUntil,
         });
       })
       .catch((err) => {

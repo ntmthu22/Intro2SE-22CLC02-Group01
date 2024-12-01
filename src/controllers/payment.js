@@ -9,12 +9,19 @@ var secretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
 
 const paymentController = {
   postPayment: async (req, res, next) => {
+    console.log(req.user.membershipType);
+    if (req.user.membershipType === "Premium") {
+      console.log("You are already on Premium plan!");
+      req.flash("success", "You are already on Premium plan!");
+      res.status(200).redirect("/user/profile");
+    }
+
     var orderInfo = "pay with MoMo";
     var partnerCode = "MOMO";
     const host = `${req.protocol}://${req.get("host")}`;
     var redirectUrl = `${host}/user/profile`;
     var ipnUrl =
-      "https://2d5f-2405-4803-c86b-6230-70-f71b-3320-a03e.ngrok-free.app/callback";
+      "https://5816-2405-4803-c6ba-fb90-c5b3-ea47-7f71-8d09.ngrok-free.app/callback";
     var requestType = "payWithMethod";
     var amount = "50000";
     var orderId = partnerCode + new Date().getTime();
@@ -102,9 +109,12 @@ const paymentController = {
     }
   },
   postCallback: async (req, res, next) => {
+    console.log("Callback called");
     const userId = req.body.extraData;
     try {
       const user = await User.findById(userId);
+
+      console.log(user);
 
       if (!user) {
         return res.status(404).json({
@@ -112,6 +122,7 @@ const paymentController = {
           message: "User not found",
         });
       }
+      console.log(req.body.resultCode);
 
       if (!req.body.resultCode) {
         await user.upgradeAccount();
