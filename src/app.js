@@ -13,6 +13,7 @@ import errorController from "./controllers/error.js";
 import multer from "multer";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import { getCurrentTime } from "./utils/time.js";
 
 import User from "./models/user.js";
 
@@ -29,7 +30,7 @@ const fileStorage = multer.diskStorage({
     cb(null, "images");
   },
   filename: (req, file, cb) => {
-    cb(null, new Date().toISOString() + "-" + file.originalname);
+    cb(null, getCurrentTime() + "_" + file.originalname);
   },
 });
 
@@ -57,6 +58,7 @@ app.use(
   }).single("myfile")
 );
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/images", express.static(path.join(__dirname, "images")));
 app.use(
   session({
     secret: "everywhere at the end of time",

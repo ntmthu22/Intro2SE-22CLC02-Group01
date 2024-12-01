@@ -26,7 +26,32 @@ const userSchema = new mongoose.Schema({
     enum: ["Free", "Premium"],
     default: "Free",
   },
+  validUntil: Date,
 });
+
+userSchema.methods.checkMembershipStatus = async function () {
+  if (this.membershipType === "Premium" && this.validUntil) {
+    const now = new Date();
+    if (now > this.validUntil) {
+      this.membershipType = "Free";
+      this.validUntil = null;
+
+      await this.save();
+    }
+  }
+};
+
+userSchema.methods.upgradeAccount = async function () {
+  if (this.membershipType === "Free") {
+    this.membershipType = "Premium";
+    const oneMonthFromNow = new Date();
+    oneMonthFromNow.setMonth(now.getMonth() + 1);
+
+    this.validUntil = oneMonthFromNow;
+
+    await this.save();
+  }
+};
 
 const User = mongoose.model("user", userSchema);
 

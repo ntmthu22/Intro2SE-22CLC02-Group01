@@ -94,4 +94,6 @@ router.get("/generate", isUser, userController.getGenerate);
 
 router.post("/generate", isUser, userController.postGenerate);
 
+router.get("/album", isUser, userController.getAlbum);
+
 export default router;

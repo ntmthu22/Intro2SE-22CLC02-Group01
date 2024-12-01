@@ -114,8 +114,7 @@ const paymentController = {
       }
 
       if (!req.body.resultCode) {
-        user.membershipType = "Premium";
-        await user.save();
+        await user.upgradeAccount();
         console.log("Membership updated!");
       }
 
