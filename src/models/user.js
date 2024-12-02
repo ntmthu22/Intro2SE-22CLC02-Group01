@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
+const Schema = mongoose.Schema;
+
+const userSchema = Schema({
   name: {
     type: String,
     required: true,
@@ -29,7 +31,15 @@ const userSchema = new mongoose.Schema({
   validUntil: {
     type: Date,
   },
+  products: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Product",
+    },
+  ],
 });
+
+userSchema.methods.downgradeAccount = async function () {};
 
 userSchema.methods.checkMembershipStatus = async function () {
   if (this.membershipType === "Premium" && this.validUntil) {

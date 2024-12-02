@@ -274,6 +274,8 @@ const userController = {
       });
 
       await product.save();
+      req.user.products.push(product);
+      await req.user.save();
 
       // return res.render("user/generate", {
       //   pageTitle: "Generate",
