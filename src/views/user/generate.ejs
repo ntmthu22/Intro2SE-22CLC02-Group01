@@ -1,6 +1,13 @@
   <%- include('../includes/general/head.ejs') %>
     <link rel="stylesheet" href="/css/generate.css">
-    <script defer src="/scripts/user/generate.js"></script>
+    <style>
+      @media only screen and (max-width: 768px) {
+        /* For mobile phones: */
+        #output-section {
+          margin-top: 3rem;
+        }
+      }
+    </style>
   </head>
   <body>
     <%- include('../includes/general/navbar.ejs') %>
@@ -68,14 +75,14 @@
             <% } %>
             <% if (errorMessage) { %>
             <div class="alert alert-danger lert-dismissible fade show mt-3 mb-0" role="alert">
-              You haven't uploaded any image!
+              <%= errorMessage %>
               <button id="autoCloseButton" type="button" class="close" data-dismiss="alert" aria-label="Close">
               </button>
             </div>
             <% } %>
             <% if (successMessage) { %>
             <div class="alert alert-success lert-dismissible fade show mt-3 mb-0" role="alert">
-              You haven't uploaded any image!
+              <%= successMessage %>
               <button id="autoCloseButton" type="button" class="close" data-dismiss="alert" aria-label="Close">
               </button>
             </div>
@@ -83,7 +90,7 @@
           </form>
         </div>
         <!-- Output Section -->
-        <div class="col-md-6">
+        <div id="output-section" class="col-md-6">
           <div class="output-section">
             <% if (videoUrl) { %>
             <video class="w-100" controls>
@@ -100,5 +107,7 @@
         </div>
       </div>
     </section>
+    <script src="/scripts/waitingfor/bootstrap-waitingfor.js"></script>
+    <script defer src="/scripts/user/generate.js"></script>
   </body>
 </html>

@@ -10,6 +10,9 @@ const loadingButton = document.getElementById("loadingButton");
 submitButton.addEventListener("click", function () {
   submitButton.classList.add("d-none");
   loadingButton.classList.remove("d-none");
+  waitingDialog.show("Please wait while your image is being processed...", {
+    progressType: "success",
+  });
 });
 
 const fileInput = document.getElementById("myfile");

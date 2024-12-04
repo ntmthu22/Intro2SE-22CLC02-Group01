@@ -76,7 +76,7 @@
                 </li>
               <% } %>
             <% } %>
-            <% if (lastPage !== currentPage && nextPage !== lastPage) { %>
+            <% if (lastPage !== 0 && lastPage !== currentPage && nextPage !== lastPage) { %>
               <li class="page-item">
                 <a class="page-link" href="?page=<%= lastPage %>"><%= lastPage %></a>
               </li>

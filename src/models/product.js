@@ -10,14 +10,26 @@ const productSchema = new Schema(
     },
     convertedImageUrl: {
       type: String,
-      required: true,
+      default: null,
     },
     videoUrl: {
       type: String,
-      required: true,
+      default: null,
     },
     plyUrl: {
       type: String,
+      default: null,
+    },
+    inputs: {
+      elevation: Number,
+      inferenceSteps: Number,
+      randomSeed: Number,
+      promptInput: String,
+      negativePromptInput: String,
+    },
+    status: {
+      type: String,
+      enum: ["success", "failed"],
       required: true,
     },
     userId: {

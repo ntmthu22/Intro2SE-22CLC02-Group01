@@ -96,4 +96,8 @@ router.post("/generate", isUser, userController.postGenerate);
 
 router.get("/album", isUser, userController.getAlbum);
 
+router.get("/album/:productId", isUser, userController.getProduct);
+
+// router.get("/album/:productId/view-ply", isUser, userController.viewPly);
+
 export default router;

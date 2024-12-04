@@ -243,53 +243,84 @@ const userController = {
     const randomSeedInput = Number(randomSeed);
 
     if (!image) {
-      req.flash("error", "You haven't uploaded any image!");
-      return res.status(404).redirect(`/${req.user.role}/generate`);
+      req.flash(
+        "error",
+        "You haven't uploaded any image! Supported types: JPG/PNG"
+      );
+      return res.status(404).redirect(`/user/generate`);
     }
 
-    try {
-      // const fileBuffer = await fs.readFile(image.path);
-      // const imageBlob = new Blob([fileBuffer], { type: image.mimetype });
-      // const app = await Client.connect("ashawkey/LGM");
-      // const result = await app.predict("/process", [
-      //   imageBlob, // blob in 'image' Image component
-      //   promptInput, // string  in 'prompt' Textbox component
-      //   negativePromptInput, // string  in 'negative prompt' Textbox component
-      //   elevationInput, // number (numeric value between -90 and 90) in 'elevation' Slider component
-      //   inferenceStepsInput, // number (numeric value between 1 and 100) in 'inference steps' Slider component
-      //   randomSeedInput, // number (numeric value between 0 and 100000) in 'random seed' Slider component
-      // ]);
+    const originalImageUrl = image.path;
 
-      const originalImageUrl = image.path;
-      // const convertedImageUrl = result.data[0].url;
-      // const videoUrl = result.data[1].video.url;
-      // const plyUrl = result.data[2].url;
+    try {
+      const fileBuffer = await fs.readFile(image.path);
+      const imageBlob = new Blob([fileBuffer], { type: image.mimetype });
+      const app = await Client.connect("ashawkey/LGM");
+      const result = await app.predict("/process", [
+        imageBlob, // blob in 'image' Image component
+        promptInput, // string  in 'prompt' Textbox component
+        negativePromptInput, // string  in 'negative prompt' Textbox component
+        elevationInput, // number (numeric value between -90 and 90) in 'elevation' Slider component
+        inferenceStepsInput, // number (numeric value between 1 and 100) in 'inference steps' Slider component
+        randomSeedInput, // number (numeric value between 0 and 100000) in 'random seed' Slider component
+      ]);
+
+      const convertedImageUrl = result.data[0].url;
+      const videoUrl = result.data[1].video.url;
+      const plyUrl = result.data[2].url;
 
       const product = new Product({
         originalImageUrl: originalImageUrl,
-        convertedImageUrl: "hello",
-        videoUrl: "hello",
-        plyUrl: "hello",
+        convertedImageUrl: convertedImageUrl,
+        videoUrl: videoUrl,
+        plyUrl: plyUrl,
         userId: req.user,
+        inputs: {
+          elevation,
+          inferenceSteps,
+          randomSeed,
+          promptInput,
+          negativePromptInput,
+        },
+        status: "success",
       });
 
       await product.save();
       req.user.products.push(product);
       await req.user.save();
 
-      // return res.render("user/generate", {
-      //   pageTitle: "Generate",
-      //   path: "/user/generate",
-      //   user: req.user,
-      //   videoUrl: videoUrl,
-      //   plyUrl: plyUrl,
-      //   successMessage: "Success!",
-      //   errorMessage: null,
-      // });
+      return res.render("user/generate", {
+        pageTitle: "Generate",
+        path: "/user/generate",
+        user: req.user,
+        videoUrl: videoUrl,
+        plyUrl: plyUrl,
+        successMessage: "Your 3D model is here. Enjoy!",
+        errorMessage: null,
+      });
     } catch (err) {
-      const error = new Error(err);
-      error.httpStatusCode = 500;
-      return next(error);
+      const product = new Product({
+        originalImageUrl: originalImageUrl,
+        userId: req.user,
+        inputs: {
+          elevation,
+          inferenceSteps,
+          randomSeed,
+          promptInput,
+          negativePromptInput,
+        },
+        status: "failed",
+      });
+
+      await product.save();
+      req.user.products.push(product);
+      await req.user.save();
+
+      // const error = new Error(err);
+      // error.httpStatusCode = 500;
+      // return next(error);
+      req.flash("error", err.message);
+      return res.redirect("/user/generate");
     }
   },
   getAlbum: (req, res, next) => {
@@ -326,6 +357,33 @@ const userController = {
           lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
         });
       });
+  },
+  getProduct: (req, res, next) => {
+    const productId = req.params.productId;
+    Product.findOne({ _id: productId })
+      .then((product) => {
+        const { date, name } = extractDateAndName(product.originalImageUrl);
+        res.render("album/product-detail", {
+          pageTitle: "Product Detail",
+          path: "/user/album",
+          user: req.user,
+          product: product,
+          date: date,
+          name: name,
+        });
+      })
+      .catch((err) => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
+      });
+  },
+  viewPly: (req, res, next) => {
+    res.render("album/view-ply", {
+      pageTitle: "View PLY",
+      path: "/user/album",
+      user: req.user,
+    });
   },
 };
 
