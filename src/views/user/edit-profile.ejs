@@ -5,7 +5,7 @@
 
     <section class="container mt-5 py-5 d-flex align-items-center justify-content-center flex-column">
       <div class="card position-relative" style="width: 18rem;">
-        <a href="/<%= user.role %>/profile" class="position-absolute" style="top:5px;left:5px;background:none;border:none">
+        <a href="/user/profile" class="position-absolute" style="top:5px;left:5px;background:none;border:none">
           <%- include('../icons/arrow_left.svg') %>
         </a>
         <div class="card-header">
@@ -17,9 +17,9 @@
           </div>
         </div>
         <ul class="list-group list-group-flush">
-          <a href="/<%= user.role %>/edit-profile/name" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">Name<span><%- include('../icons/arrow_right.svg') %></span></a>
-          <a href="/<%= user.role %>/edit-profile/email" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">Email<span><%- include('../icons/arrow_right.svg') %></span></a>
-          <a href="/<%= user.role %>/edit-profile/password" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">Password<span><%- include('../icons/arrow_right.svg') %></span></a>
+          <a href="/user/edit-profile/name" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">Name<span><%- include('../icons/arrow_right.svg') %></span></a>
+          <a href="/user/edit-profile/email" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">Email<span><%- include('../icons/arrow_right.svg') %></span></a>
+          <a href="/user/edit-profile/password" class="list-group-item list-group-item-action d-flex align-items-center justify-content-between">Password<span><%- include('../icons/arrow_right.svg') %></span></a>
         </ul>
       </div>
     </section>

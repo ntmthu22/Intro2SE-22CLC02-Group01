@@ -1,12 +1,11 @@
 import paymentController from "../controllers/payment.js";
-import isUser from "../middlewares/is-user.js";
-import { body } from "express-validator";
+import checkRole from "../middlewares/check-role.js";
 
 import express from "express";
 
 const router = express.Router();
 
-router.post("/payment", isUser, paymentController.postPayment);
+router.post("/payment", checkRole("user"), paymentController.postPayment);
 
 router.post("/callback", paymentController.postCallback);
 

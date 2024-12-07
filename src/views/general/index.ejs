@@ -92,5 +92,14 @@
       });
     </script>
     <% } %>
+    <% if (indexError) { %>
+    <script>
+      Swal.fire({
+        title: "Error!",
+        text: "<%= indexError %>",
+        icon: "error"
+      });
+    </script>
+    <% } %>
 
     <%- include('../includes/general/end.ejs') %>

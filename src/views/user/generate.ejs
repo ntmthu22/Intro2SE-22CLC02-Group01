@@ -15,7 +15,7 @@
       <div class="row">
         <div class="col-md-6">
           <form
-            action="/<%= user.role %>/generate"
+            action="/user/generate"
             method="POST"
             enctype="multipart/form-data"
           >
@@ -29,7 +29,7 @@
               </div>
             </div>
 
-            <% if (user.membershipType === 'Premium') { %>
+            <% if (membershipType === 'Premium') { %>
             <div class="form-group">
               <label for="promptInput">prompt</label>
               <textarea class="form-control" id="promptInput" name="promptInput" rows="2" placeholder="Describe how you want your 3D object to be"></textarea>
@@ -65,7 +65,7 @@
               Loading...
             </button>
 
-            <% if (user.membershipType === 'Free') { %>
+            <% if (membershipType === 'Free') { %>
             <div class="alert alert-warning alert-dismissible fade show mt-3 mb-0" role="alert">
               Upgrade account to gain access to exclusive features like <strong>Prompt Input</strong> and enjoy <strong>unlimited tries</strong>.
               <button type="button" class="close" data-dismiss="alert" aria-label="Close">

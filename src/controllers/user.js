@@ -43,14 +43,6 @@ const userController = {
       });
   },
   getEditProfile: (req, res, next) => {
-    let errorMessage = req.flash("error");
-
-    if (errorMessage.length > 0) {
-      errorMessage = errorMessage[0];
-    } else {
-      errorMessage = null;
-    }
-
     let successMessage = req.flash("success");
 
     if (successMessage.length > 0) {
@@ -64,7 +56,6 @@ const userController = {
       path: "/user/edit-profile",
       user: req.user,
       successMessage: successMessage,
-      errorMessage: errorMessage,
     });
   },
   getEditProfileName: (req, res, next) => {
@@ -72,7 +63,7 @@ const userController = {
       pageTitle: "Edit Name",
       path: "/user/edit-profile/name",
       originalName: req.user.name,
-      user: req.user,
+      username: req.user.name,
       errorMessage: null,
       validationErrors: [],
     });
@@ -82,7 +73,7 @@ const userController = {
       pageTitle: "Edit Email",
       path: "/user/edit-profile/email",
       originalEmail: req.user.email,
-      user: req.user,
+      usermail: req.user.email,
       errorMessage: null,
       validationErrors: [],
     });
@@ -97,10 +88,7 @@ const userController = {
         pageTitle: "Edit Name",
         path: "/user/edit-profile/name",
         originalName: req.user.name,
-        user: {
-          name: name,
-          role: req.user.role,
-        },
+        username: name,
         errorMessage: errors.array()[0].msg,
         validationErrors: errors.array(),
       });
@@ -112,7 +100,7 @@ const userController = {
       .save()
       .then(() => {
         req.flash("success", "Name changed!");
-        res.redirect("/user/edit-profile");
+        res.status(200).redirect("/user/edit-profile");
       })
       .catch((err) => {
         const error = new Error(err);
@@ -130,10 +118,7 @@ const userController = {
         pageTitle: "Edit Email",
         path: "/user/edit-profile/email",
         originalEmail: req.user.email,
-        user: {
-          email: email,
-          role: req.user.role,
-        },
+        usermail: email,
         errorMessage: errors.array()[0].msg,
         validationErrors: errors.array(),
       });
@@ -145,7 +130,7 @@ const userController = {
       .save()
       .then(() => {
         req.flash("success", "Email changed!");
-        res.redirect("/user/edit-profile");
+        res.status(200).redirect("/user/edit-profile");
       })
       .catch((err) => {
         const error = new Error(err);
@@ -157,7 +142,6 @@ const userController = {
     res.render("user/edit-profile-password", {
       pageTitle: "Edit Password",
       path: "/user/edit-profile/password",
-      user: req.user,
       oldInput: {
         password: "",
         newPassword: "",
@@ -176,7 +160,6 @@ const userController = {
       return res.status(422).render("user/edit-profile-password", {
         pageTitle: "Edit Password",
         path: "/user/edit-profile/password",
-        user: req.user,
         oldInput: {
           password: password,
           newPassword: newPassword,
@@ -192,7 +175,7 @@ const userController = {
       req.user.password = newHashedPassword;
       await req.user.save();
       req.flash("success", "Password changed!");
-      res.redirect("/user/edit-profile");
+      res.status(200).redirect("/user/edit-profile");
     } catch (err) {
       const error = new Error(err);
       error.httpStatusCode = 500;
@@ -220,7 +203,7 @@ const userController = {
     res.render("user/generate", {
       pageTitle: "Generate",
       path: "/user/generate",
-      user: req.user,
+      membershipType: req.user.membershipType,
       videoUrl: null,
       plyUrl: null,
       errorMessage: errorMessage,
@@ -301,7 +284,7 @@ const userController = {
       return res.render("user/generate", {
         pageTitle: "Generate",
         path: "/user/generate",
-        user: req.user,
+        membershipType: req.user.membershipType,
         videoUrl: videoUrl,
         plyUrl: plyUrl,
         successMessage: "Your 3D model is here. Enjoy!",
@@ -320,7 +303,7 @@ const userController = {
       await req.user.save();
 
       req.flash("error", err.message);
-      return res.redirect("/user/generate");
+      return res.status(500).redirect("/user/generate");
     }
   },
   getAlbum: (req, res, next) => {
@@ -347,7 +330,7 @@ const userController = {
         res.render("album/product-list", {
           pageTitle: "Album",
           path: "/user/album",
-          user: req.user,
+          username: req.user.name,
           prods: updatedProducts,
           currentPage: page,
           hasNextPage: ITEMS_PER_PAGE * page < totalItems,
@@ -366,7 +349,7 @@ const userController = {
         res.render("album/product-detail", {
           pageTitle: "Product Detail",
           path: "/user/album",
-          user: req.user,
+          username: req.user.name,
           product: product,
           date: date,
           name: name,
@@ -377,13 +360,6 @@ const userController = {
         error.httpStatusCode = 500;
         return next(error);
       });
-  },
-  viewPly: (req, res, next) => {
-    res.render("album/view-ply", {
-      pageTitle: "View PLY",
-      path: "/user/album",
-      user: req.user,
-    });
   },
 };
 

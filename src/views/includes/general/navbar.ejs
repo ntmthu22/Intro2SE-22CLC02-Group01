@@ -10,7 +10,7 @@
   </button>
   <div class="collapse navbar-collapse" id="collapsibleNavbar">
     <ul class="navbar-nav ml-auto">
-      <% if (isAuthenticated) { %>
+      <% if (isAuthenticated && role === 'User') { %>
       <li class="nav-item <%= path === '/user/generate' ? 'active' : '' %>">
         <a class="nav-link" href="/user/generate">GENERATE</a>
       </li>
@@ -40,10 +40,8 @@
           PROFILE
         </button>
         <div class="dropdown-menu dropdown-menu-right">
-          <a class="dropdown-item" href="/<%= user.role %>/profile"
-            >View profile</a
-          >
-          <a class="dropdown-item" href="/<%= user.role %>/edit-profile"
+          <a class="dropdown-item" href="/<%= role %>/profile">View profile</a>
+          <a class="dropdown-item" href="/<%= role %>/edit-profile"
             >Edit profile</a
           >
           <div class="dropdown-divider"></div>

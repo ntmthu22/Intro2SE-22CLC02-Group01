@@ -7,12 +7,20 @@ const generalController = {
     } else {
       successMessage = null;
     }
-    
+
+    let indexError = req.flash("indexError");
+
+    if (indexError.length > 0) {
+      indexError = indexError[0];
+    } else {
+      indexError = null;
+    }
+
     res.render("general/index", {
       pageTitle: "Home",
       path: "/",
-      user: req.user,
       successMessage: successMessage,
+      indexError: indexError,
     });
   },
 
@@ -20,7 +28,6 @@ const generalController = {
     res.render("general/features", {
       pageTitle: "Features",
       path: "/features",
-      user: req.user,
     });
   },
 
@@ -28,7 +35,6 @@ const generalController = {
     res.render("general/testimonials", {
       pageTitle: "Testimonials",
       path: "/testimonials",
-      user: req.user,
     });
   },
 
@@ -36,7 +42,6 @@ const generalController = {
     res.render("general/about-us", {
       pageTitle: "About Us",
       path: "/about-us",
-      user: req.user,
     });
   },
 };

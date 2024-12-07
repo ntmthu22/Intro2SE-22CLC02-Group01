@@ -3,17 +3,21 @@ import bcrypt from "bcryptjs";
 import { body } from "express-validator";
 import User from "../models/user.js";
 import userController from "../controllers/user.js";
-import isUser from "../middlewares/is-user.js";
+import checkRole from "../middlewares/check-role.js";
 
 const router = express.Router();
 
-router.get("/profile", isUser, userController.getProfile);
-router.get("/edit-profile", isUser, userController.getEditProfile);
-router.get("/edit-profile/name", isUser, userController.getEditProfileName);
+router.get("/profile", checkRole("user"), userController.getProfile);
+router.get("/edit-profile", checkRole("user"), userController.getEditProfile);
+router.get(
+  "/edit-profile/name",
+  checkRole("user"),
+  userController.getEditProfileName
+);
 
 router.post(
   "/edit-profile/name",
-  isUser,
+  checkRole("user"),
   [
     body("name", "Your name shouldn't be too long or too short")
       .trim()
@@ -24,11 +28,15 @@ router.post(
   userController.postEditProfileName
 );
 
-router.get("/edit-profile/email", isUser, userController.getEditProfileEmail);
+router.get(
+  "/edit-profile/email",
+  checkRole("user"),
+  userController.getEditProfileEmail
+);
 
 router.post(
   "/edit-profile/email",
-  isUser,
+  checkRole("user"),
   [
     body("email", "Invalid email!")
       .trim()
@@ -47,13 +55,13 @@ router.post(
 
 router.get(
   "/edit-profile/password",
-  isUser,
+  checkRole("user"),
   userController.getEditProfilePassword
 );
 
 router.post(
   "/edit-profile/password",
-  isUser,
+  checkRole("user"),
   [
     body("password")
       .trim()
@@ -90,14 +98,12 @@ router.post(
   userController.postEditProfilePassword
 );
 
-router.get("/generate", isUser, userController.getGenerate);
+router.get("/generate", checkRole("user"), userController.getGenerate);
 
-router.post("/generate", isUser, userController.postGenerate);
+router.post("/generate", checkRole("user"), userController.postGenerate);
 
-router.get("/album", isUser, userController.getAlbum);
+router.get("/album", checkRole("user"), userController.getAlbum);
 
-router.get("/album/:productId", isUser, userController.getProduct);
-
-// router.get("/album/:productId/view-ply", isUser, userController.viewPly);
+router.get("/album/:productId", checkRole("user"), userController.getProduct);
 
 export default router;

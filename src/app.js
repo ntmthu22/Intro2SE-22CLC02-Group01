@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
 import generalRoutes from "./routes/general.js";
 import userRoutes from "./routes/user.js";
+import adminRoutes from "./routes/admin.js";
 import paymentRoutes from "./routes/payment.js";
 import session from "express-session";
 import MongoDBStore from "connect-mongodb-session";
@@ -74,6 +75,7 @@ app.set("views", "views");
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.role = "guest";
   next();
 });
 
@@ -86,6 +88,7 @@ app.use((req, res, next) => {
       if (!user) {
         return next();
       }
+      res.locals.role = user.role;
       req.user = user;
       next();
     })
@@ -97,6 +100,7 @@ app.use((req, res, next) => {
 app.use(authRoutes);
 app.use(generalRoutes);
 app.use("/user", userRoutes);
+app.use("/admin", adminRoutes);
 app.use(paymentRoutes);
 
 app.get("/500", errorController.get500);
