@@ -21,7 +21,7 @@ const paymentController = {
     const host = `${req.protocol}://${req.get("host")}`;
     var redirectUrl = `${host}/user/profile`;
     var ipnUrl =
-      "https://5816-2405-4803-c6ba-fb90-c5b3-ea47-7f71-8d09.ngrok-free.app/callback";
+      "https://518e-2405-4803-c636-3f00-18da-b3d6-fd8c-5d0c.ngrok-free.app/callback";
     var requestType = "payWithMethod";
     var amount = "50000";
     var orderId = partnerCode + new Date().getTime();

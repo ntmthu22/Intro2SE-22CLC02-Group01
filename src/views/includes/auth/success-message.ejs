@@ -1,3 +1,9 @@
 <% if (successMessage) { %>
-<p class="message success-message"><%= successMessage %></p>
+<script>
+  Swal.fire({
+    title: "Success!",
+    text: "<%= successMessage %>",
+    icon: "success"
+  });
+</script>
 <% } %>

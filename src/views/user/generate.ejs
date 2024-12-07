@@ -11,7 +11,7 @@
   </head>
   <body>
     <%- include('../includes/general/navbar.ejs') %>
-    <section class="container py-5">
+    <section class="container py-5 mt-5">
       <div class="row">
         <div class="col-md-6">
           <form
@@ -73,13 +73,6 @@
               </button>
             </div>
             <% } %>
-            <% if (errorMessage) { %>
-            <div class="alert alert-danger lert-dismissible fade show mt-3 mb-0" role="alert">
-              <%= errorMessage %>
-              <button id="autoCloseButton" type="button" class="close" data-dismiss="alert" aria-label="Close">
-              </button>
-            </div>
-            <% } %>
             <% if (successMessage) { %>
             <div class="alert alert-success lert-dismissible fade show mt-3 mb-0" role="alert">
               <%= successMessage %>
@@ -107,6 +100,15 @@
         </div>
       </div>
     </section>
+    <% if (errorMessage) { %>
+    <script>
+      Swal.fire({
+        title: "Error!",
+        text: "<%= errorMessage %>",
+        icon: "error"
+      });
+    </script>
+    <% } %>
     <script src="/scripts/waitingfor/bootstrap-waitingfor.js"></script>
     <script defer src="/scripts/user/generate.js"></script>
   </body>

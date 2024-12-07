@@ -230,22 +230,37 @@ const userController = {
   postGenerate: async (req, res, next) => {
     const image = req.file;
 
-    const {
-      elevation,
-      inferenceSteps,
-      randomSeed,
-      promptInput,
-      negativePromptInput,
-    } = req.body;
+    let inputs = {
+      promptInput: "",
+      negativePromptInput:
+        "ugly, blurry, pixelated obscure, unnatural colors, poor lighting, dull, unclear, cropped, lowres, low quality, artifacts, duplicate",
+      elevation: 0,
+      inferenceSteps: 30,
+      randomSeed: 0,
+    };
 
-    const elevationInput = Number(elevation);
-    const inferenceStepsInput = Number(inferenceSteps);
-    const randomSeedInput = Number(randomSeed);
+    if (req.user.membershipType === "Premium") {
+      const {
+        elevation,
+        inferenceSteps,
+        randomSeed,
+        promptInput,
+        negativePromptInput,
+      } = req.body;
+
+      inputs = {
+        promptInput: promptInput,
+        negativePromptInput: negativePromptInput,
+        elevation: Number(elevation),
+        inferenceSteps: Number(inferenceSteps),
+        randomSeed: Number(randomSeed),
+      };
+    }
 
     if (!image) {
       req.flash(
         "error",
-        "You haven't uploaded any image! Supported types: JPG/PNG"
+        "You haven not uploaded any image! Supported types: JPG/PNG"
       );
       return res.status(404).redirect(`/user/generate`);
     }
@@ -258,11 +273,11 @@ const userController = {
       const app = await Client.connect("ashawkey/LGM");
       const result = await app.predict("/process", [
         imageBlob, // blob in 'image' Image component
-        promptInput, // string  in 'prompt' Textbox component
-        negativePromptInput, // string  in 'negative prompt' Textbox component
-        elevationInput, // number (numeric value between -90 and 90) in 'elevation' Slider component
-        inferenceStepsInput, // number (numeric value between 1 and 100) in 'inference steps' Slider component
-        randomSeedInput, // number (numeric value between 0 and 100000) in 'random seed' Slider component
+        inputs.promptInput,
+        inputs.negativePromptInput,
+        inputs.elevation,
+        inputs.inferenceSteps,
+        inputs.randomSeed,
       ]);
 
       const convertedImageUrl = result.data[0].url;
@@ -275,13 +290,7 @@ const userController = {
         videoUrl: videoUrl,
         plyUrl: plyUrl,
         userId: req.user,
-        inputs: {
-          elevation,
-          inferenceSteps,
-          randomSeed,
-          promptInput,
-          negativePromptInput,
-        },
+        inputs,
         status: "success",
       });
 
@@ -302,13 +311,7 @@ const userController = {
       const product = new Product({
         originalImageUrl: originalImageUrl,
         userId: req.user,
-        inputs: {
-          elevation,
-          inferenceSteps,
-          randomSeed,
-          promptInput,
-          negativePromptInput,
-        },
+        inputs,
         status: "failed",
       });
 
@@ -316,9 +319,6 @@ const userController = {
       req.user.products.push(product);
       await req.user.save();
 
-      // const error = new Error(err);
-      // error.httpStatusCode = 500;
-      // return next(error);
       req.flash("error", err.message);
       return res.redirect("/user/generate");
     }

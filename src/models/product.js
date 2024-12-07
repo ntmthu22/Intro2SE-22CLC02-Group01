@@ -21,11 +21,11 @@ const productSchema = new Schema(
       default: null,
     },
     inputs: {
+      promptInput: String,
+      negativePromptInput: String,
       elevation: Number,
       inferenceSteps: Number,
       randomSeed: Number,
-      promptInput: String,
-      negativePromptInput: String,
     },
     status: {
       type: String,

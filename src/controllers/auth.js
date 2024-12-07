@@ -176,6 +176,7 @@ const authController = {
           if (isMatch) {
             req.session.isLoggedIn = true;
             req.session.user = user;
+            req.flash('success', `Welcome back, ${user.name}!`);
             return req.session.save((err) => {
               console.log(err);
               res.redirect("/");
@@ -236,7 +237,7 @@ const authController = {
           return user.save();
         })
         .then(() => {
-          req.flash("success", "We've sent a reset link to your email account");
+          req.flash("success", "We have sent a reset link to your email account");
           res.redirect("/login");
 
           const templatePath = path.join(

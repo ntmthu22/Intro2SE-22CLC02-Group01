@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
   <a class="navbar-brand" href="/">PIC2MODEL</a>
   <button
     class="navbar-toggler"
@@ -12,7 +12,7 @@
     <ul class="navbar-nav ml-auto">
       <% if (isAuthenticated) { %>
       <li class="nav-item <%= path === '/user/generate' ? 'active' : '' %>">
-        <a class="nav-link" href="/user/generate">START GENERATING</a>
+        <a class="nav-link" href="/user/generate">GENERATE</a>
       </li>
       <% } %>
       <li class="nav-item <%= path === '/features' ? 'active' : '' %>">
@@ -22,7 +22,7 @@
         <a class="nav-link" href="/testimonials">TESTIMONIALS</a>
       </li>
       <li class="nav-item <%= path === '/about-us' ? 'active' : '' %>">
-        <a class="nav-link" href="/about-us">ABOUT US</a>
+        <a class="nav-link" href="/about-us">ABOUT</a>
       </li>
       <% if (!isAuthenticated) { %>
       <li class="nav-item">

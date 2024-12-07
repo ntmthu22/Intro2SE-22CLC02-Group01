@@ -1,9 +1,18 @@
 const generalController = {
   getIndex: (req, res, next) => {
+    let successMessage = req.flash("success");
+
+    if (successMessage.length > 0) {
+      successMessage = successMessage[0];
+    } else {
+      successMessage = null;
+    }
+    
     res.render("general/index", {
       pageTitle: "Home",
       path: "/",
       user: req.user,
+      successMessage: successMessage,
     });
   },
 
