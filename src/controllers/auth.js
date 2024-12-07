@@ -8,6 +8,8 @@ import path from "path";
 import ejs from "ejs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import dotenv from "dotenv";
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -15,8 +17,7 @@ const __dirname = dirname(__filename);
 const transporter = nodemailer.createTransport(
   sendgridTransport({
     auth: {
-      api_key:
-        "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",
+      api_key: process.env.SENDGRID_API,
     },
   })
 );
@@ -176,7 +177,7 @@ const authController = {
           if (isMatch) {
             req.session.isLoggedIn = true;
             req.session.user = user;
-            req.flash('success', `Welcome back, ${user.name}!`);
+            req.flash("success", `Welcome back, ${user.name}!`);
             return req.session.save((err) => {
               console.log(err);
               res.redirect("/");
@@ -237,7 +238,10 @@ const authController = {
           return user.save();
         })
         .then(() => {
-          req.flash("success", "We have sent a reset link to your email account");
+          req.flash(
+            "success",
+            "We have sent a reset link to your email account"
+          );
           res.redirect("/login");
 
           const templatePath = path.join(
