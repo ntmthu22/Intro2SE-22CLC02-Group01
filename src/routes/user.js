@@ -4,11 +4,22 @@ import { body } from "express-validator";
 import User from "../models/user.js";
 import userController from "../controllers/user.js";
 import checkRole from "../middlewares/check-role.js";
+import checkMembership from "../middlewares/check-membership.js";
 
 const router = express.Router();
 
-router.get("/profile", checkRole("user"), userController.getProfile);
-router.get("/edit-profile", checkRole("user"), userController.getEditProfile);
+router.get(
+  "/profile",
+  checkRole("user"),
+  checkMembership,
+  userController.getProfile
+);
+router.get(
+  "/edit-profile",
+  checkRole("user"),
+  checkMembership,
+  userController.getEditProfile
+);
 router.get(
   "/edit-profile/name",
   checkRole("user"),
@@ -98,7 +109,12 @@ router.post(
   userController.postEditProfilePassword
 );
 
-router.get("/generate", checkRole("user"), userController.getGenerate);
+router.get(
+  "/generate",
+  checkRole("user"),
+  checkMembership,
+  userController.getGenerate
+);
 
 router.post("/generate", checkRole("user"), userController.postGenerate);
 

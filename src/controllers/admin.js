@@ -79,8 +79,7 @@ const adminController = {
       validationErrors: [],
     });
   },
-
-  postEditProfilePassword: async (req, res) => {
+  postEditProfilePassword: async (req, res, next) => {
     const { password, newPassword, confirmNewPassword } = req.body;
 
     const errors = validationResult(req);
@@ -110,6 +109,12 @@ const adminController = {
       error.httpStatusCode = 500;
       return next(error);
     }
+  },
+  getManage: (req, res, next) => {
+    res.render("admin/users", {
+      pageTitle: "Users",
+      path: "/admin/users",
+    });
   },
 };
 

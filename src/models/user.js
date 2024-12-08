@@ -2,44 +2,51 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const userSchema = Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  resetToken: String,
-  resetTokenExpiration: Date,
-  password: {
-    type: String,
-    required: true,
-  },
-  role: {
-    type: String,
-    enum: ["User", "Admin"],
-    default: "User",
-  },
-  membershipType: {
-    type: String,
-    enum: ["Free", "Premium"],
-    default: "Free",
-  },
-  validUntil: {
-    type: Date,
-  },
-  products: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Product",
+const userSchema = new Schema(
+  {
+    name: {
+      type: String,
+      required: true,
     },
-  ],
-});
-
-userSchema.methods.downgradeAccount = async function () {};
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    resetToken: String,
+    resetTokenExpiration: Date,
+    password: {
+      type: String,
+      required: true,
+    },
+    role: {
+      type: String,
+      enum: ["User", "Admin"],
+      default: "User",
+    },
+    membershipType: {
+      type: String,
+      enum: ["Free", "Premium"],
+      default: "Free",
+    },
+    validUntil: {
+      type: Date,
+    },
+    products: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
+    status: {
+      type: String,
+      enum: ["active", "disabled", "banned"],
+      default: "active",
+    },
+    loginTimestamps: [Date],
+  },
+  { timestamps: true }
+);
 
 userSchema.methods.checkMembershipStatus = async function () {
   if (this.membershipType === "Premium" && this.validUntil) {
@@ -47,7 +54,6 @@ userSchema.methods.checkMembershipStatus = async function () {
     if (now > this.validUntil) {
       this.membershipType = "Free";
       this.validUntil = undefined;
-
       await this.save();
     }
   }

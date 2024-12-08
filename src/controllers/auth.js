@@ -152,7 +152,7 @@ const authController = {
         return next(error);
       });
   },
-  postLogin: (req, res, next) => {
+  postLogin: async (req, res, next) => {
     const { email, password } = req.body;
 
     const errors = validationResult(req);
@@ -171,42 +171,54 @@ const authController = {
       });
     }
 
-    User.findOne({ email: email })
-      .then((user) => {
-        bcrypt.compare(password, user.password).then((isMatch) => {
-          if (isMatch) {
-            req.session.isLoggedIn = true;
-            req.session.user = user;
-            req.flash("success", `Welcome back, ${user.name}!`);
-            return req.session.save((err) => {
-              console.log(err);
-              res.redirect("/");
-            });
-          }
-          return res.status(422).render("auth/log-in", {
-            path: "/login",
-            pageTitle: "Login",
-            successMessage: "",
-            errorMessage: "Incorrect password. Please try again!",
-            oldInput: {
-              email: email,
-              password: password,
-            },
-            validationErrors: [
-              {
-                path: "password",
-              },
-            ],
-          });
-        });
-      })
-      .catch((err) => {
-        const error = new Error(err);
-        error.httpStatusCode = 500;
-        return next(error);
-      });
-  },
+    try {
+      const user = await User.findOne({ email: email });
 
+      if (!user) {
+        throw new Error("User not found!");
+      }
+
+      const isMatch = await bcrypt.compare(password, user.password);
+
+      if (!isMatch) {
+        return res.status(422).render("auth/log-in", {
+          path: "/login",
+          pageTitle: "Login",
+          successMessage: "",
+          errorMessage: "Incorrect password. Please try again!",
+          oldInput: {
+            email: email,
+            password: password,
+          },
+          validationErrors: [
+            {
+              path: "password",
+            },
+          ],
+        });
+      }
+
+      user.loginTimestamps.push(new Date());
+      if (user.loginTimestamps.length > 100) {
+        user.loginTimestamps.shift(); // Remove the oldest timestamp
+      }
+      await user.save();
+
+      req.session.isLoggedIn = true;
+      req.session.user = user;
+      req.flash("success", `Welcome back, ${user.name}!`);
+      req.session.save((err) => {
+        if (err) {
+          console.log(err);
+        }
+        res.redirect("/");
+      });
+    } catch (err) {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    }
+  },
   postReset: (req, res, next) => {
     const email = req.body.email;
 

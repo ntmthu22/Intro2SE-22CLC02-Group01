@@ -1,4 +1,9 @@
   <%- include('../includes/general/head.ejs') %>
+  <style>
+    .nav-link {
+      cursor: pointer;
+    }
+  </style>
   </head>
   <body>
     <%- include('../includes/general/navbar.ejs') %>
@@ -83,25 +88,36 @@
               <div class="card-header">
                 <ul class="nav nav-tabs card-header-tabs">
                   <li class="nav-item">
-                    <a class="nav-link active" href="#">Account Management</a>
+                    <a id="nav-link-1" class="nav-link active" data-card-id="1">Account Management</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">Recent Activities</a>
+                    <a id="nav-link-2" class="nav-link" data-card-id="2">Recent Activities</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link">Overall Analytics</a>
+                    <a id="nav-link-3" class="nav-link" data-card-id="3">Overall Analytics</a>
                   </li>
                 </ul>
               </div>
-              <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+              <div class="card-body paragraph" id="card-1">
+                <h5 class="card-title">Manage user accounts</h5>
+                <p class="card-text">View their activies, products, or suspend suspicious accounts</p>
+                <a href="/admin/users" class="btn btn-primary">Go to manage page</a>
+              </div>
+              <div class="card-body paragraph d-none" id="card-2">
+                <h5 class="card-title">Recent activies from users</h5>
+                <p class="card-text">A snapshot of the latest activities across the platform, quickly identify trends or anomalies.</p>
+                <a href="/admin/user-activities" class="btn btn-primary">Go to activities</a>
+              </div>
+              <div class="card-body paragraph d-none" id="card-3">
+                <h5 class="card-title">Overall activities this month</h5>
+                <p class="card-text">Summarize the platfrom's overall activity for the current month.</p>
+                <a href="/admin/analytics" class="btn btn-primary">Go to analytics</a>
               </div>
             </div>
           </div>
         </div>
       </div>
     </section>
+    <script src="/scripts/admin/card-manip.js"></script>
   </body>
 </html>

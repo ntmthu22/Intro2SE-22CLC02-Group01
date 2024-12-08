@@ -4,7 +4,8 @@ import { Client } from "@gradio/client";
 import { Blob } from "buffer"; // Built-in Node.js module for Blob
 import fs from "fs/promises";
 import Product from "../models/product.js";
-import { extractDate, extractDateAndName } from "../utils/time.js";
+import Log from "../models/log.js";
+import { extractLocalDate, extractDateAndName } from "../utils/time.js";
 
 const ITEMS_PER_PAGE = 6;
 const PREVIEW_ITEMS = 2;
@@ -25,7 +26,7 @@ const userController = {
         let validUntil = undefined;
 
         if (req.user.membershipType === "Premium") {
-          validUntil = extractDate(req.user.validUntil);
+          validUntil = extractLocalDate(req.user.validUntil);
         }
 
         res.render("user/profile", {
@@ -281,7 +282,26 @@ const userController = {
       req.user.products.push(product);
       await req.user.save();
 
-      return res.render("user/generate", {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth() + 1;
+
+      const userId = req.user._id;
+
+      let log = await Log.findOne({ userId, year, month });
+
+      if (!log) {
+        log = new Log({
+          userId,
+          year,
+          month,
+        });
+      }
+
+      log.count += 1;
+      await log.save();
+
+      return res.status(200).render("user/generate", {
         pageTitle: "Generate",
         path: "/user/generate",
         membershipType: req.user.membershipType,

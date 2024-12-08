@@ -70,4 +70,6 @@ router.post(
   adminController.postEditProfilePassword
 );
 
+router.get("/users", adminController.getManage);
+
 export default router;

@@ -1,9 +1,4 @@
-export const getCurrentTime = () => {
-  const now = new Date();
-  return new Date(now.getTime() + 7 * 60 * 60 * 1000).toISOString();
-};
-
-export const extractDate = (date) => {
+export const extractLocalDate = (date) => {
   const options = {
     month: "short",
     day: "2-digit",
@@ -11,7 +6,6 @@ export const extractDate = (date) => {
     hour: "2-digit",
     minute: "2-digit",
     hour12: true,
-    timeZone: "UTC",
   };
 
   return date.toLocaleString("en-US", options);
@@ -23,7 +17,7 @@ export const extractDateAndName = (filename) => {
 
   const date = new Date(dateString);
 
-  const formattedDate = extractDate(date);
+  const formattedDate = extractLocalDate(date);
 
   return { date: formattedDate, name };
 };
