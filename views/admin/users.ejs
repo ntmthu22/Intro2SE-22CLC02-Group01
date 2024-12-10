@@ -57,6 +57,7 @@
           </div>
         </div>
       </div>
+      <input id="herokuURL" type="hidden" value="<%= herokuURL %>">
     </div>
     <%- include('../includes/pagination.ejs', {currentPage: currentPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage}) %>
     <% } else { %>

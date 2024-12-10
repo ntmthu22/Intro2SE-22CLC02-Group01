@@ -2,7 +2,7 @@ document.querySelectorAll(".fas.fa-undo").forEach((undoIcon) => {
   undoIcon.addEventListener("click", () => {
     handleAccountAction(
       "restore",
-      `${process.env.HEROKU_APP_URL}/admin/users/${undoIcon.dataset.userId}/restore`
+      `https://pic2model-e0bcecc6ad3b.herokuapp.com/admin/users/${undoIcon.dataset.userId}/restore`
     );
   });
 });
@@ -11,7 +11,7 @@ document.querySelectorAll(".far.fa-trash-alt").forEach((trashIcon) => {
   trashIcon.addEventListener("click", () => {
     handleAccountAction(
       "disable",
-      `${process.env.HEROKU_APP_URL}/admin/users/${trashIcon.dataset.userId}/disable`
+      `https://pic2model-e0bcecc6ad3b.herokuapp.com/admin/users/${trashIcon.dataset.userId}/disable`
     );
   });
 });
@@ -23,7 +23,7 @@ if (disableButton) {
   disableButton.addEventListener("click", function () {
     handleAccountAction(
       "disable",
-      `${process.env.HEROKU_APP_URL}/admin/users/${disableButton.dataset.userId}/disable`
+      `https://pic2model-e0bcecc6ad3b.herokuapp.com/admin/users/${disableButton.dataset.userId}/disable`
     );
   });
 }
@@ -31,7 +31,7 @@ if (restoreButton) {
   restoreButton.addEventListener("click", function () {
     handleAccountAction(
       "restore",
-      `${process.env.HEROKU_APP_URL}/admin/users/${restoreButton.dataset.userId}/restore`
+      `https://pic2model-e0bcecc6ad3b.herokuapp.com/admin/users/${restoreButton.dataset.userId}/restore`
     );
   });
 }
