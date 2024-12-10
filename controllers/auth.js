@@ -136,6 +136,7 @@ const authController = {
             console.log(err);
             return;
           }
+          console.log("Rendered HTML Content:", htmlContent); // Check output
           return transporter.sendMail({
             to: email,
             from: "noreply.pic2model@gmail.com",
