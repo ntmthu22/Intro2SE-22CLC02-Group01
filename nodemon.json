@@ -1,5 +1,6 @@
 {
   "env": {
+    "HEROKU_APP_URL": "http://localhost:3000",
     "MONGO_USER": "ptbtin22",
     "MONGO_PASSWORD": "i6k2WrR2Rhr9AbcS",
     "MONGO_DATABASE": "imgconverter",
