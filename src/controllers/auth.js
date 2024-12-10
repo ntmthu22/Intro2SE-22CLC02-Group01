@@ -198,6 +198,14 @@ const authController = {
         });
       }
 
+      if (user.status === "disabled") {
+        req.flash(
+          "error",
+          "Your account has been disabled, please connect Admin to restore it."
+        );
+        return res.status(403).redirect("/login");
+      }
+
       user.loginTimestamps.push(new Date());
       if (user.loginTimestamps.length > 100) {
         user.loginTimestamps.shift(); // Remove the oldest timestamp
@@ -287,7 +295,9 @@ const authController = {
   },
   postLogout: (req, res) => {
     req.session.destroy((err) => {
-      console.log(err);
+      if (err) {
+        console.log(err);
+      }
       res.redirect("/");
     });
   },

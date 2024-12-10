@@ -72,4 +72,12 @@ router.post(
 
 router.get("/users", adminController.getManage);
 
+router.post("/users/:userId/disable", adminController.disableAccount);
+
+router.post("/users/:userId/restore", adminController.restoreAccount);
+
+router.get("/users/:userId", adminController.getUserDetail);
+
+router.get("/users/:userId/activities", adminController.getUserActivities);
+
 export default router;

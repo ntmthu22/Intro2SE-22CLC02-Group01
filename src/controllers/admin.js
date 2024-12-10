@@ -1,5 +1,10 @@
 import { validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
+import User from "../models/user.js";
+import Log from "../models/log.js";
+import { extractLocalDate } from "../utils/time.js";
+
+const USERS_PER_PAGE = 4;
 
 const adminController = {
   getProfile: (req, res, next) => {
@@ -110,11 +115,157 @@ const adminController = {
       return next(error);
     }
   },
-  getManage: (req, res, next) => {
-    res.render("admin/users", {
-      pageTitle: "Users",
-      path: "/admin/users",
-    });
+  getManage: async (req, res, next) => {
+    const page = +req.query.page || 1;
+    let totalUsers;
+
+    User.find({ role: { $ne: "Admin" } })
+      .countDocuments()
+      .then((numUsers) => {
+        totalUsers = numUsers;
+        return User.find({ role: { $ne: "Admin" } })
+          .skip((page - 1) * USERS_PER_PAGE)
+          .limit(USERS_PER_PAGE);
+      })
+      .then((users) => {
+        res.render("admin/users", {
+          pageTitle: "Users",
+          path: "/admin/users",
+          users: users,
+          currentPage: page,
+          hasNextPage: USERS_PER_PAGE * page < totalUsers,
+          hasPreviousPage: page > 1,
+          nextPage: page + 1,
+          previousPage: page - 1,
+          lastPage: Math.ceil(totalUsers / USERS_PER_PAGE),
+        });
+      })
+      .catch((err) => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
+      });
+  },
+  disableAccount: async (req, res, next) => {
+    try {
+      const userId = req.params.userId;
+
+      const user = await User.findById(userId);
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found!" });
+      }
+
+      user.status = "disabled";
+      await user.save();
+
+      return res.status(200).json({ message: "Account disabled!" });
+    } catch (err) {
+      return res.status(500).json({ message: "Internal server error." });
+    }
+  },
+  restoreAccount: async (req, res, next) => {
+    try {
+      const userId = req.params.userId;
+
+      const user = await User.findById(userId);
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found!" });
+      }
+
+      user.status = "active";
+      await user.save();
+
+      return res.status(200).json({ message: "Account restored!" });
+    } catch (err) {
+      return res.status(500).json({ message: "Internal server error." });
+    }
+  },
+  getUserDetail: async (req, res, next) => {
+    const userId = req.params.userId;
+
+    if (userId === req.user._id.toString()) {
+      return res.status(403).redirect("/admin/users");
+    }
+
+    try {
+      const user = await User.findById(userId);
+
+      if (!user) {
+        const error = new Error("User not found");
+        error.statusCode = 404;
+        throw error;
+      }
+
+      const now = new Date();
+      const currentYear = Number(now.getFullYear());
+      const currentMonth = Number(now.getMonth() + 1);
+
+      const monthlyLog = await Log.findOne({
+        userId: userId,
+        year: currentYear,
+        month: currentMonth,
+      });
+
+      const expiredDate = user.validUntil
+        ? extractLocalDate(user.validUntil)
+        : null;
+      const createdAt = extractLocalDate(user.createdAt);
+
+      res.render("admin/user-detail", {
+        pageTitle: "User Detail",
+        path: "/admin/user-detail",
+        user: user,
+        expiredDate: expiredDate,
+        createdAt: createdAt,
+        monthlyCount: monthlyLog ? monthlyLog.count : 0,
+      });
+    } catch (err) {
+      if (!err.statusCode) {
+        err.statusCode = 500; // INTERAL SERVER $RROR
+      }
+      next(err);
+    }
+  },
+  getUserActivities: async (req, res, next) => {
+    const userId = req.params.userId;
+    const username = req.query.username;
+
+    if (userId === req.user._id.toString()) {
+      return res.status(403).redirect("/admin/users");
+    }
+
+    try {
+      const logs = await Log.find({ userId: userId });
+
+      let groupedLogs = {};
+
+      if (logs.length > 0) {
+        logs.forEach((log) => {
+          const year = log.year;
+          const month = log.month;
+
+          if (!groupedLogs[year]) {
+            groupedLogs[year] = {};
+          }
+          groupedLogs[year][month] = log.count;
+        });
+      }
+
+      res.render("admin/user-activities", {
+        pageTitle: "User Activities",
+        path: "/admin/user-activities",
+        groupedLogs: JSON.stringify(groupedLogs),
+        userId: userId,
+        username: username,
+      });
+    } catch (err) {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      return next(err);
+    }
   },
 };
 

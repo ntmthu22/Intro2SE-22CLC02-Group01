@@ -1,0 +1,41 @@
+<%- include('../includes/general/head.ejs') %>
+    <style>
+      @media only screen and (max-width: 991px) {
+        /* For mobile phones: */
+        .btn.btn-info.btn-lg.btn-block {
+          margin-bottom: 1rem;
+        }
+        section {
+          margin-bottom: 2rem;
+        }
+      }
+      .custom-link:hover{
+        color: #0d6efd;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../includes/general/navbar.ejs') %>
+    
+    <section style="background-color: white; margin-top: 6rem;">
+      <input id="groupedlogs-value" type="hidden" value="<%= groupedLogs %>">
+      <div class="container w-100">
+        <div class="card mb-4">
+          <div class="card-header"><a href="/admin/users/<%= userId %>" class="text-primary"><%= username %></a>'s activities</div>
+          <div class="card-body">
+            <canvas id="myChart" height="120"></canvas>
+          </div>
+          <div class="d-flex justify-content-center align-items-center p-4">
+            <a class="custom-link" id="yearly-statistics">View yearly statistics</a>
+            <a class="custom-link d-none" id="monthly-statistics">View monthly statistics</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/scripts/admin/user-statistics.js"></script>
+  </body>
+</html>
