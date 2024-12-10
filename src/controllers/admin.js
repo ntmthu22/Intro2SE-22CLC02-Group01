@@ -2,9 +2,11 @@ import { validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
 import User from "../models/user.js";
 import Log from "../models/log.js";
-import { extractLocalDate } from "../utils/time.js";
+import Product from "../models/product.js";
+import { extractLocalDate, extractDateAndName } from "../utils/time.js";
 
 const USERS_PER_PAGE = 4;
+const ITEMS_PER_PAGE = 6;
 
 const adminController = {
   getProfile: (req, res, next) => {
@@ -230,13 +232,20 @@ const adminController = {
   },
   getUserActivities: async (req, res, next) => {
     const userId = req.params.userId;
-    const username = req.query.username;
 
     if (userId === req.user._id.toString()) {
       return res.status(403).redirect("/admin/users");
     }
 
     try {
+      const user = await User.findById(userId);
+
+      if (!user) {
+        const error = new Error("User not found");
+        error.statusCode = 404;
+        throw error;
+      }
+
       const logs = await Log.find({ userId: userId });
 
       let groupedLogs = {};
@@ -257,8 +266,7 @@ const adminController = {
         pageTitle: "User Activities",
         path: "/admin/user-activities",
         groupedLogs: JSON.stringify(groupedLogs),
-        userId: userId,
-        username: username,
+        user: user,
       });
     } catch (err) {
       if (!err.statusCode) {
@@ -266,6 +274,72 @@ const adminController = {
       }
       return next(err);
     }
+  },
+  getUserAlbum: (req, res, next) => {
+    const userId = req.params.userId;
+    const username = req.query.username;
+    const page = +req.query.page || 1;
+
+    let totalItems;
+
+    Product.find({ userId: userId })
+      .countDocuments()
+      .then((numProducts) => {
+        totalItems = numProducts;
+        return Product.find({ userId: userId })
+          .sort({ createdAt: -1 })
+          .skip((page - 1) * ITEMS_PER_PAGE)
+          .limit(ITEMS_PER_PAGE);
+      })
+      .then((products) => {
+        let updatedProducts = JSON.parse(JSON.stringify(products));
+
+        updatedProducts = updatedProducts.map((product) => {
+          product.dateAndName = extractDateAndName(product.originalImageUrl);
+          return product;
+        });
+
+        res.render("album/product-list", {
+          pageTitle: `User Album`,
+          path: `/admin/users/${userId}/album`,
+          username: username,
+          prods: updatedProducts,
+          currentPage: page,
+          hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+          hasPreviousPage: page > 1,
+          nextPage: page + 1,
+          previousPage: page - 1,
+          lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
+          viewAsAdmin: true,
+        });
+      })
+      .catch((err) => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
+      });
+  },
+  getUserProduct: (req, res, next) => {
+    const { productId } = req.params;
+    const { username } = req.query;
+
+    Product.findOne({ _id: productId })
+      .then((product) => {
+        const { date, name } = extractDateAndName(product.originalImageUrl);
+        res.render("album/product-detail", {
+          pageTitle: "Product Detail",
+          path: "/admin/user-product/",
+          username: username,
+          product: product,
+          date: date,
+          name: name,
+        });
+      })
+      .catch((err) => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
+      });
   },
 };
 

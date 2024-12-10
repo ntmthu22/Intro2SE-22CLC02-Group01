@@ -80,4 +80,8 @@ router.get("/users/:userId", adminController.getUserDetail);
 
 router.get("/users/:userId/activities", adminController.getUserActivities);
 
+router.get("/users/:userId/album", adminController.getUserAlbum);
+
+router.get("/user-product/:productId", adminController.getUserProduct);
+
 export default router;

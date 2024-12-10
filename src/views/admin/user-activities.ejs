@@ -23,7 +23,7 @@
       <input id="groupedlogs-value" type="hidden" value="<%= groupedLogs %>">
       <div class="container w-100">
         <div class="card mb-4">
-          <div class="card-header"><a href="/admin/users/<%= userId %>" class="text-primary"><%= username %></a>'s activities</div>
+          <div class="card-header"><a href="/admin/users/<%= user._id %>" class="text-primary"><%= user.name %></a>'s activities</div>
           <div class="card-body">
             <canvas id="myChart" height="120"></canvas>
           </div>

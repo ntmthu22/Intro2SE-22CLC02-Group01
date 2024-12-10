@@ -11,8 +11,8 @@ mongoose
       const hashedPassword = await bcrypt.hash("admin123", 12);
 
       const user = new User({
-        name: "ADMIN",
-        email: "admin@gmail.com",
+        name: "ADMIN2",
+        email: "admin2@gmail.com",
         password: hashedPassword,
         role: "Admin",
       });

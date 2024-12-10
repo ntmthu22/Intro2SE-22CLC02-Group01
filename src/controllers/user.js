@@ -358,7 +358,13 @@ const userController = {
           nextPage: page + 1,
           previousPage: page - 1,
           lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
+          viewAsAdmin: false,
         });
+      })
+      .catch((err) => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
       });
   },
   getProduct: (req, res, next) => {

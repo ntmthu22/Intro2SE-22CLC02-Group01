@@ -31,9 +31,15 @@
                   <p class="card-text">
                     Created by <strong class="text-primary"><%= username %></strong> on <span class="text-primary"><%= prods[i].dateAndName.date %></span> 
                   </p>
+                  <% if (!viewAsAdmin) { %>
                   <a type="button" href="/user/album/<%= prods[i]._id %>" class="btn btn-outline-primary">
                     See Detail
                   </a>
+                  <% } else { %>
+                  <a type="button" href="/admin/user-product/<%= prods[i]._id %>?username=<%= username %>" class="btn btn-outline-primary">
+                    See Detail
+                  </a>
+                  <% } %>
                 </div>
               </div>
             </div>
