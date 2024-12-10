@@ -25,6 +25,7 @@
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
     "express": "^4.21.1",
+    "express-session": "^1.18.1",
     "express-validator": "^7.2.0",
     "fetch-blob": "^4.0.0",
     "mongoose": "^8.7.3",
@@ -36,7 +37,6 @@
   },
   "devDependencies": {
     "@gradio/client": "^1.8.0",
-    "express-session": "^1.18.1",
     "nodemon": "^3.1.7"
   }
 }
