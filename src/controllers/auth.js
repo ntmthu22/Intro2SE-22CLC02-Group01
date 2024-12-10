@@ -8,8 +8,6 @@ import path from "path";
 import ejs from "ejs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import dotenv from "dotenv";
-dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -131,7 +129,7 @@ const authController = {
           __dirname,
           "../views/emails/welcome-email.ejs"
         );
-        const loginLink = `${req.protocol}://${req.get("host")}/login`;
+        const loginLink = `${process.env.HEROKU_APP_URL}/login`;
 
         ejs.renderFile(templatePath, { loginLink }, (err, htmlContent) => {
           if (err) {
@@ -268,9 +266,7 @@ const authController = {
             __dirname,
             "../views/emails/reset-password-email.ejs"
           );
-          const resetLink = `${req.protocol}://${req.get(
-            "host"
-          )}/reset/${token}`;
+          const resetLink = `${process.env.HEROKU_APP_URL}/reset/${token}`;
 
           ejs.renderFile(templatePath, { resetLink }, (err, htmlContent) => {
             if (err) {

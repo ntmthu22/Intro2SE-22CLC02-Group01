@@ -3,9 +3,13 @@
   "name": "nmcnpm",
   "version": "1.0.0",
   "main": "script.js",
+  "engines": {
+    "node": "20.18.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "accessKey=F8BBA842ECF85 secretKey=K951B6PE1waDMi640xX08PD3vg6EkVlz NODE_ENV=production MONGO_USER=ptbtin22 MONGO_PASSWORD=i6k2WrR2Rhr9AbcS MONGO_DATABASE=imgconverter SENDGRID_API=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 node app.js",
+    "dev": "nodemon app.js"
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +18,7 @@
     "axios": "^1.7.8",
     "bcryptjs": "^2.4.3",
     "bootstrap-waitingfor": "^1.2.7",
+    "compression": "^1.7.5",
     "connect-flash": "^0.1.1",
     "connect-mongodb-session": "^5.0.0",
     "csrf-csrf": "^3.0.8",

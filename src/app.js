@@ -1,7 +1,6 @@
 import path from "path";
 import express from "express";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import authRoutes from "./routes/auth.js";
 import generalRoutes from "./routes/general.js";
 import userRoutes from "./routes/user.js";
@@ -14,14 +13,15 @@ import errorController from "./controllers/error.js";
 import multer from "multer";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import compression from "compression";
 
 import User from "./models/user.js";
 
-dotenv.config();
+const MONGO_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@mongodb-nodejs.hfqzv.mongodb.net/${process.env.MONGO_DATABASE}`;
 
 const app = express();
 const store = new MongoDBStore(session)({
-  uri: process.env.MONGO_URI,
+  uri: MONGO_URI,
   collection: "sesions",
 });
 
@@ -49,6 +49,7 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
+app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -114,9 +115,9 @@ app.use((error, req, res, next) => {
 });
 
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect(MONGO_URI)
   .then(() => {
     console.log("Connected to MongoDB!");
-    app.listen(3000);
+    app.listen(process.env.PORT || 3000);
   })
   .catch((err) => console.log(err));

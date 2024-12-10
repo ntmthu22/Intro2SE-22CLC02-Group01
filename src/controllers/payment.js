@@ -4,9 +4,6 @@ import axios from "axios";
 import crypto from "crypto";
 import User from "../models/user.js";
 
-var accessKey = "F8BBA842ECF85";
-var secretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz";
-
 const paymentController = {
   postPayment: async (req, res, next) => {
     console.log(req.user.membershipType);
@@ -18,10 +15,8 @@ const paymentController = {
 
     var orderInfo = "pay with MoMo";
     var partnerCode = "MOMO";
-    const host = `${req.protocol}://${req.get("host")}`;
-    var redirectUrl = `${host}/user/profile`;
-    var ipnUrl =
-      "https://518e-2405-4803-c636-3f00-18da-b3d6-fd8c-5d0c.ngrok-free.app/callback";
+    var redirectUrl = `${process.env.HEROKU_APP_URL}/user/profile`;
+    var ipnUrl = `${process.env.HEROKU_APP_URL}/callback`;
     var requestType = "payWithMethod";
     var amount = "50000";
     var orderId = partnerCode + new Date().getTime();
@@ -35,7 +30,7 @@ const paymentController = {
     //accessKey=$accessKey&amount=$amount&extraData=$extraData&ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
     var rawSignature =
       "accessKey=" +
-      accessKey +
+      process.env.accessKey +
       "&amount=" +
       amount +
       "&extraData=" +
@@ -60,7 +55,7 @@ const paymentController = {
     //signature
 
     var signature = crypto
-      .createHmac("sha256", secretKey)
+      .createHmac("sha256", process.env.secretKey)
       .update(rawSignature)
       .digest("hex");
     console.log("--------------------SIGNATURE----------------");
