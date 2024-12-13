@@ -10,6 +10,6 @@ router.get("/samples", generalController.getSamples);
 
 router.get("/testimonials", generalController.getTestimonials);
 
-router.get("/about-us", generalController.getAboutUs);
+router.get("/about", generalController.getAbout);
 
 export default router;

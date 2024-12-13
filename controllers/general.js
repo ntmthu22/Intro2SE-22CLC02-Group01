@@ -38,10 +38,10 @@ const generalController = {
     });
   },
 
-  getAboutUs: (req, res, next) => {
-    res.render("general/about-us", {
+  getAbout: (req, res, next) => {
+    res.render("general/about", {
       pageTitle: "About Us",
-      path: "/about-us",
+      path: "/about",
     });
   },
 };
