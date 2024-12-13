@@ -39,7 +39,7 @@ const userController = {
       })
       .catch((err) => {
         const error = new Error(err);
-        error.httpStatusCode = 500;
+        error.statusCode = 500;
         return next(error);
       });
   },
@@ -105,7 +105,7 @@ const userController = {
       })
       .catch((err) => {
         const error = new Error(err);
-        error.httpStatusCode = 500;
+        error.statusCode = 500;
         return next(error);
       });
   },
@@ -135,7 +135,7 @@ const userController = {
       })
       .catch((err) => {
         const error = new Error(err);
-        error.httpStatusCode = 500;
+        error.statusCode = 500;
         return next(error);
       });
   },
@@ -179,7 +179,7 @@ const userController = {
       res.status(200).redirect("/user/edit-profile");
     } catch (err) {
       const error = new Error(err);
-      error.httpStatusCode = 500;
+      error.statusCode = 500;
       return next(error);
     }
   },
@@ -326,46 +326,56 @@ const userController = {
       return res.status(500).redirect("/user/generate");
     }
   },
-  getAlbum: (req, res, next) => {
+  getAlbum: async (req, res, next) => {
     const page = +req.query.page || 1;
     let totalItems;
+    let updatedProducts;
+    let lastPage;
 
-    Product.find({ userId: req.user._id })
-      .countDocuments()
-      .then((numProducts) => {
-        totalItems = numProducts;
-        return Product.find({ userId: req.user._id })
+    try {
+      totalItems = await Product.find({
+        userId: req.user._id,
+      }).countDocuments();
+
+      if (totalItems > 0) {
+        lastPage = Math.ceil(totalItems / ITEMS_PER_PAGE);
+
+        if (page > lastPage || page < 1) {
+          return res.redirect(`/user/album?page=${Math.max(page - 1, 1)}`);
+        }
+
+        const products = await Product.find({ userId: req.user._id })
           .sort({ createdAt: -1 })
           .skip((page - 1) * ITEMS_PER_PAGE)
           .limit(ITEMS_PER_PAGE);
-      })
-      .then((products) => {
-        let updatedProducts = JSON.parse(JSON.stringify(products));
+
+        updatedProducts = JSON.parse(JSON.stringify(products));
 
         updatedProducts = updatedProducts.map((product) => {
           product.dateAndName = extractDateAndName(product.originalImageUrl);
           return product;
         });
+      }
 
-        res.render("album/product-list", {
-          pageTitle: "Album",
-          path: "/user/album",
-          username: req.user.name,
-          prods: updatedProducts,
-          currentPage: page,
-          hasNextPage: ITEMS_PER_PAGE * page < totalItems,
-          hasPreviousPage: page > 1,
-          nextPage: page + 1,
-          previousPage: page - 1,
-          lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
-          viewAsAdmin: false,
-        });
-      })
-      .catch((err) => {
-        const error = new Error(err);
-        error.httpStatusCode = 500;
-        return next(error);
+      res.render("album/product-list", {
+        pageTitle: "Album",
+        path: "/user/album",
+        username: req.user.name,
+        prods: updatedProducts,
+        currentPage: page,
+        hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: lastPage ?? 1,
+        viewAsAdmin: false,
       });
+    } catch (err) {
+      console.log(err);
+      const error = new Error(err);
+      error.statusCode = 500;
+      return next(error);
+    }
   },
   getProduct: (req, res, next) => {
     const productId = req.params.productId;
@@ -383,9 +393,29 @@ const userController = {
       })
       .catch((err) => {
         const error = new Error(err);
-        error.httpStatusCode = 500;
+        error.statusCode = 500;
         return next(error);
       });
+  },
+  deleteProduct: async (req, res, next) => {
+    const productId = req.params.productId;
+
+    try {
+      const result = await Product.findByIdAndDelete(productId);
+      if (!result) {
+        return res
+          .status(404)
+          .json({ message: "The process could not go through!" });
+      }
+      req.user.products.pull(productId);
+      await req.user.save();
+
+      return res.status(200).json({ message: "Deleted item successfully!" });
+    } catch (err) {
+      const error = new Error(err);
+      error.statusCode = 500;
+      return next(error);
+    }
   },
 };
 

@@ -24,10 +24,10 @@ const generalController = {
     });
   },
 
-  getFeatures: (req, res, next) => {
-    res.render("general/features", {
-      pageTitle: "Features",
-      path: "/features",
+  getSamples: (req, res, next) => {
+    res.render("general/samples", {
+      pageTitle: "Samples",
+      path: "/samples",
     });
   },
 

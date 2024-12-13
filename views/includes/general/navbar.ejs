@@ -10,13 +10,27 @@
   </button>
   <div class="collapse navbar-collapse" id="collapsibleNavbar">
     <ul class="navbar-nav ml-auto">
-      <% if (isAuthenticated && role === 'User') { %>
+      <% if (role === 'User') { %>
       <li class="nav-item <%= path === '/user/generate' ? 'active' : '' %>">
         <a class="nav-link" href="/user/generate">GENERATE</a>
       </li>
-      <% } %>
-      <li class="nav-item <%= path === '/features' ? 'active' : '' %>">
-        <a class="nav-link" href="/features">FEATURES</a>
+      <% } else if (role === 'Admin' ) { %>
+      <li class="nav-item <%= path === '/admin/users' ? 'active' : '' %>">
+        <a class="nav-link" href="/admin/users">MANAGE</a>
+      </li>
+      <li
+        class="nav-item <%= path === '/admin/recent-activities' ? 'active' : '' %>"
+      >
+        <a class="nav-link" href="/admin/recent-activities">RECENT</a>
+      </li>
+      <li
+        class="nav-item <%= path === '/admin/overall-analytics' ? 'active' : '' %>"
+      >
+        <a class="nav-link" href="/admin/overall-analytics">OVERALL</a>
+      </li>
+      <% } %> <% if (role !== 'Admin') { %>
+      <li class="nav-item <%= path === '/samples' ? 'active' : '' %>">
+        <a class="nav-link" href="/samples">SAMPLES</a>
       </li>
       <li class="nav-item <%= path === '/testimonials' ? 'active' : '' %>">
         <a class="nav-link" href="/testimonials">TESTIMONIALS</a>
@@ -24,7 +38,7 @@
       <li class="nav-item <%= path === '/about-us' ? 'active' : '' %>">
         <a class="nav-link" href="/about-us">ABOUT</a>
       </li>
-      <% if (!isAuthenticated) { %>
+      <% } %> <% if (!isAuthenticated) { %>
       <li class="nav-item">
         <a class="nav-link" href="/login">JOIN NOW</a>
       </li>

@@ -122,4 +122,10 @@ router.get("/album", checkRole("user"), userController.getAlbum);
 
 router.get("/album/:productId", checkRole("user"), userController.getProduct);
 
+router.delete(
+  "/delete-product/:productId",
+  checkRole("user"),
+  userController.deleteProduct
+);
+
 export default router;

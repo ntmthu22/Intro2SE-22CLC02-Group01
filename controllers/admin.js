@@ -5,7 +5,7 @@ import Log from "../models/log.js";
 import Product from "../models/product.js";
 import { extractLocalDate, extractDateAndName } from "../utils/time.js";
 
-const USERS_PER_PAGE = 4;
+const USERS_PER_PAGE = 3;
 const ITEMS_PER_PAGE = 6;
 
 const adminController = {
@@ -121,32 +121,33 @@ const adminController = {
     const page = +req.query.page || 1;
     let totalUsers;
 
-    User.find({ role: { $ne: "Admin" } })
-      .countDocuments()
-      .then((numUsers) => {
-        totalUsers = numUsers;
-        return User.find({ role: { $ne: "Admin" } })
-          .skip((page - 1) * USERS_PER_PAGE)
-          .limit(USERS_PER_PAGE);
-      })
-      .then((users) => {
-        res.render("admin/users", {
-          pageTitle: "Users",
-          path: "/admin/users",
-          users: users,
-          currentPage: page,
-          hasNextPage: USERS_PER_PAGE * page < totalUsers,
-          hasPreviousPage: page > 1,
-          nextPage: page + 1,
-          previousPage: page - 1,
-          lastPage: Math.ceil(totalUsers / USERS_PER_PAGE),
-        });
-      })
-      .catch((err) => {
-        const error = new Error(err);
-        error.httpStatusCode = 500;
-        return next(error);
+    try {
+      totalUsers = await User.find({ role: { $ne: "Admin" } }).countDocuments();
+
+      if (page > Math.ceil(totalUsers / USERS_PER_PAGE) || page < 1) {
+        return res.redirect(`/admin/users?page=${Math.max(page - 1, 1)}`);
+      }
+
+      const users = await User.find({ role: { $ne: "Admin" } })
+        .skip((page - 1) * USERS_PER_PAGE)
+        .limit(USERS_PER_PAGE);
+
+      res.render("admin/users", {
+        pageTitle: "Users",
+        path: "/admin/users",
+        users: users,
+        currentPage: page,
+        hasNextPage: USERS_PER_PAGE * page < totalUsers,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(totalUsers / USERS_PER_PAGE),
       });
+    } catch (err) {
+      const error = new Error(err.message || "Internal server error");
+      error.statusCode = 500;
+      next(error);
+    }
   },
   disableAccount: async (req, res, next) => {
     try {

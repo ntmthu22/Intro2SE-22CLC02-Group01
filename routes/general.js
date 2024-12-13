@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get("/", generalController.getIndex);
 
-router.get("/features", generalController.getFeatures);
+router.get("/samples", generalController.getSamples);
 
 router.get("/testimonials", generalController.getTestimonials);
 
