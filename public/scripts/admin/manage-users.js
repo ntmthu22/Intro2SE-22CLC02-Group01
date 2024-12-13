@@ -7,7 +7,7 @@ document.querySelectorAll(".fas.fa-undo").forEach((undoIcon) => {
   });
 });
 
-document.querySelectorAll(".far.fa-trash-alt").forEach((trashIcon) => {
+document.querySelectorAll(".fa.fa-ban").forEach((trashIcon) => {
   trashIcon.addEventListener("click", () => {
     handleAccountAction(
       "disable",
