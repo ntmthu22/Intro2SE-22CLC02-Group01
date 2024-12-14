@@ -86,4 +86,6 @@ router.get("/user-product/:productId", adminController.getUserProduct);
 
 router.get("/recent-activities", adminController.getRecent);
 
+router.get("/overall", adminController.getOverall);
+
 export default router;

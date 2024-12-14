@@ -373,6 +373,31 @@ const adminController = {
       });
   },
   getRecent: async (req, res, next) => {},
+  getOverall: async (req, res, next) => {
+    const allUsers = await User.find({ role: { $ne: "Admin" } });
+
+    const numberOfUsers = allUsers.length;
+
+    const activeUserCount = allUsers.reduce((count, user) => {
+      return user.status === "active" ? count + 1 : count;
+    }, 0);
+
+    const premiumUserCount = allUsers.reduce((count, user) => {
+      return user.membershipType === "Premium" ? count + 1 : count;
+    }, 0);
+
+    res.render("admin/overall", {
+      pageTitle: "Overall",
+      path: "/admin/overall",
+      totalUser: numberOfUsers,
+      activeUserPercentage:
+        numberOfUsers > 0
+          ? (activeUserCount / numberOfUsers).toFixed(2) * 100
+          : 0,
+      premiumUsers: premiumUserCount,
+      freeUsers: numberOfUsers - premiumUserCount,
+    });
+  },
 };
 
 export default adminController;

@@ -1,18 +1,26 @@
 setTimeout(() => {
-  document.getElementById("autoCloseButton").click();
+  document.getElementById("autoCloseButton")?.click();
 }, 2000);
+
+NProgress.configure({
+  minimum: 0.1, // Minimum percentage
+  speed: 300, // Speed of the progress bar
+  showSpinner: false, // Hide the spinner
+  trickleSpeed: 200, // How often to trickle, in ms
+  easing: "ease", // Easing for animation
+});
 
 function updateValue(spanId, value) {
   document.getElementById(spanId).textContent = value;
 }
+
 const submitButton = document.querySelector('button.btn[type="submit"]');
 const loadingButton = document.getElementById("loadingButton");
 submitButton.addEventListener("click", function () {
   submitButton.classList.add("d-none");
   loadingButton.classList.remove("d-none");
-  waitingDialog.show("Please wait while your image is being processed...", {
-    progressType: "success",
-  });
+  NProgress.start();
+  NProgress.inc();
 });
 
 const fileInput = document.getElementById("myfile");
@@ -45,7 +53,7 @@ function previewImage(event) {
 }
 
 function submitPicture() {
-  console.log("CLikced");
+  console.log("Clicked");
   fetch("/User/generate", {
     method: "POST",
   })
