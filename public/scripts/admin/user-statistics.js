@@ -2,6 +2,26 @@ const groupedLogs = JSON.parse(
   document.getElementById("groupedlogs-value").value
 );
 
+const loginData = JSON.parse(document.getElementById("login-data").value);
+const loginLabels = JSON.parse(document.getElementById("login-labels").value);
+const loginCtx = document.getElementById("myLoginChart").getContext("2d");
+
+new Chart(loginCtx, {
+  type: "line",
+  data: {
+    labels: loginLabels, // array of string
+    datasets: [
+      {
+        label: "Login attempts", // string
+        data: loginData, // array of number
+        fill: false,
+        borderColor: "rgb(75, 192, 192)",
+        tension: 1,
+      },
+    ],
+  },
+});
+
 const PREV_MONTHS = 4;
 
 const monthDict = {

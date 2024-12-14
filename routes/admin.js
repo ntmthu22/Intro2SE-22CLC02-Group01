@@ -84,4 +84,6 @@ router.get("/users/:userId/album", adminController.getUserAlbum);
 
 router.get("/user-product/:productId", adminController.getUserProduct);
 
+router.get("/recent-activities", adminController.getRecent);
+
 export default router;

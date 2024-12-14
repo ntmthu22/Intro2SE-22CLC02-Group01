@@ -5,7 +5,7 @@ import { Blob } from "buffer"; // Built-in Node.js module for Blob
 import fs from "fs/promises";
 import Product from "../models/product.js";
 import Log from "../models/log.js";
-import { extractLocalDate, extractDateAndName } from "../utils/time.js";
+import { extractLocalDateAndTime, extractDateAndName } from "../utils/time.js";
 
 const ITEMS_PER_PAGE = 6;
 const PREVIEW_ITEMS = 2;
@@ -26,7 +26,7 @@ const userController = {
         let validUntil = undefined;
 
         if (req.user.membershipType === "Premium") {
-          validUntil = extractLocalDate(req.user.validUntil);
+          validUntil = extractLocalDateAndTime(req.user.validUntil);
         }
 
         res.render("user/profile", {

@@ -1,7 +1,7 @@
 <%- include('../includes/general/head.ejs') %>
     <link rel="stylesheet" href="/css/general.css" />
   </head>
-  <body>
+  <body class="d-flex flex-column" style="margin: 0; min-height: 100vh;">
     <!-- <div class="jumbotron text-center" style="margin-bottom: 0">
       <h1>PIC2MODEL</h1>
       <p>Get 3D models of your favorite flat images become easy!</p>
@@ -9,25 +9,13 @@
 
     <%- include('../includes/general/navbar.ejs') %>
 
-    <!-- Content here -->
-    <section class="py-5" style="margin-top: 4rem;">
-      <div class="container" style="width: 550px;">
-        <h2 class="display-5 fw-bold mb-4 mx-auto">About This Website</h2>
-        <p class="lead mb-1">This website was created with the help of <a href="https://www.w3schools.com/bootstrap4/" target="_blank" rel="noopener noreferrer">W3Schools</a></p>
-        <p class="lead mb-1">Themes and components from <a href="https://getbootstrap.com/docs/4.6/getting-started/introduction/" target="_blank" rel="noopener noreferrer">Boostrap 4</a></p>
-        <p class="lead mb-1">Cool abstract images from <a href="https://www.pexels.com/search/google%20deepmind/" target="_blank" rel="noopener noreferrer">Google DeepMind</a></p>
-        <p class="lead mb-1">API: <a href="https://huggingface.co/spaces/ashawkey/LGM" target="_blank" rel="noopener noreferrer">LGM: Large Multi-View Gaussian Model for High-Resolution 3D Content Creation</a></p>
-        <p class="lead mb-1">Frontend: JavaScript, HTML & CSS</p>
-        <p class="lead mb-1">Backend: NodeJS and ExpressJS</p>
-        <p class="lead mb-1">Database: MongoDB</p>
-        <p class="lead mb-1">Template Engine: EJS</p>
-        <p class="lead mb-1">And other JavaScript libraries</p>
-        <p class="lead mb-1">Developer: <a href="https://github.com/ptbtin22" target="_blank" rel="noopener noreferrer">ptbtin22</a></p>
-      </div>
+    <section class="flex-fill py-5 d-flex flex-column align-items-center justify-content-center">
+      <h1 class="mb-2">Introduction to Software Engineering</h1>
+      <p class="lead mb-1">Nhập Môn Công Nghệ Phần Mềm - CSC13002</p>
+      <p class="lead mb-1">Final Project</p>
+      <p class="lead mb-0"><a href="https://github.com/ntmthu22/Intro2SE-22CLC02-Group01">Intro2SE-22CLC02-Group01</a></p>
     </section>
-    
-    <footer class="jumbotron text-center fixed-bottom" style="margin-bottom: 0;">
-      <p>&copy HCMUS 2024. No Rights Reserved.</p>
-    </footer>
+
+    <%- include('../includes/general/footer.ejs') %>
   </body>
 </html>

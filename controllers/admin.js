@@ -3,7 +3,11 @@ import bcrypt from "bcryptjs";
 import User from "../models/user.js";
 import Log from "../models/log.js";
 import Product from "../models/product.js";
-import { extractLocalDate, extractDateAndName } from "../utils/time.js";
+import {
+  extractLocalDateAndTime,
+  extractLocalDate,
+  extractDateAndName,
+} from "../utils/time.js";
 
 const USERS_PER_PAGE = 3;
 const ITEMS_PER_PAGE = 6;
@@ -212,9 +216,9 @@ const adminController = {
       });
 
       const expiredDate = user.validUntil
-        ? extractLocalDate(user.validUntil)
+        ? extractLocalDateAndTime(user.validUntil)
         : null;
-      const createdAt = extractLocalDate(user.createdAt);
+      const createdAt = extractLocalDateAndTime(user.createdAt);
 
       res.render("admin/user-detail", {
         pageTitle: "User Detail",
@@ -263,10 +267,36 @@ const adminController = {
         });
       }
 
+      const loginAttempts = user.loginTimestamps.filter((login) => {
+        return new Date() - login <= 7 * 24 * 60 * 60 * 1000;
+      });
+
+      const loginStatisticsMap = new Map();
+
+      loginAttempts.forEach((attempt) => {
+        const dateKey = extractLocalDate(attempt);
+
+        if (!loginStatisticsMap.has(dateKey)) {
+          loginStatisticsMap.set(dateKey, 1); // Initialize with 1 login
+        } else {
+          loginStatisticsMap.set(dateKey, loginStatisticsMap.get(dateKey) + 1); // Increment count
+        }
+      });
+
+      const loginLabels = [];
+      const loginData = [];
+
+      loginStatisticsMap.forEach((value, key) => {
+        loginLabels.push(key);
+        loginData.push(value);
+      });
+
       res.render("admin/user-activities", {
         pageTitle: "User Activities",
         path: "/admin/user-activities",
         groupedLogs: JSON.stringify(groupedLogs),
+        loginLabels: JSON.stringify(loginLabels),
+        loginData: JSON.stringify(loginData),
         user: user,
       });
     } catch (err) {
@@ -342,6 +372,7 @@ const adminController = {
         return next(error);
       });
   },
+  getRecent: async (req, res, next) => {},
 };
 
 export default adminController;
