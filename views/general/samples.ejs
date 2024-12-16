@@ -16,7 +16,9 @@
           <p class="lead text-muted">Many users have enjoyed exploring our website—here are some amazing 3D objects they’ve created!</p>
           <p>
             <a href="/" class="btn btn-secondary my-2">Return to main</a>
+            <% if (!isAuthenticated) { %>
             <a href="/signup" class="btn btn-primary my-2">Sign up now</a>
+            <% } %>
           </p>
         </div>
       </section>
