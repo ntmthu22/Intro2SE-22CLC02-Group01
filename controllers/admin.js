@@ -8,6 +8,7 @@ import {
   extractLocalDate,
   extractDateAndName,
 } from "../utils/time.js";
+import Earning from "../models/earning.js";
 
 const USERS_PER_PAGE = 3;
 const ITEMS_PER_PAGE = 6;
@@ -374,29 +375,59 @@ const adminController = {
   },
   getRecent: async (req, res, next) => {},
   getOverall: async (req, res, next) => {
-    const allUsers = await User.find({ role: { $ne: "Admin" } });
+    try {
+      const allUsers = await User.find({ role: { $ne: "Admin" } });
 
-    const numberOfUsers = allUsers.length;
+      const numberOfUsers = allUsers.length;
 
-    const activeUserCount = allUsers.reduce((count, user) => {
-      return user.status === "active" ? count + 1 : count;
-    }, 0);
+      const activeUserCount = allUsers.reduce((count, user) => {
+        return user.status === "active" ? count + 1 : count;
+      }, 0);
 
-    const premiumUserCount = allUsers.reduce((count, user) => {
-      return user.membershipType === "Premium" ? count + 1 : count;
-    }, 0);
+      const premiumUserCount = allUsers.reduce((count, user) => {
+        return user.membershipType === "Premium" ? count + 1 : count;
+      }, 0);
 
-    res.render("admin/overall", {
-      pageTitle: "Overall",
-      path: "/admin/overall",
-      totalUser: numberOfUsers,
-      activeUserPercentage:
-        numberOfUsers > 0
-          ? (activeUserCount / numberOfUsers).toFixed(2) * 100
-          : 0,
-      premiumUsers: premiumUserCount,
-      freeUsers: numberOfUsers - premiumUserCount,
-    });
+      const earnings = await Earning.find({
+        year: new Date().getFullYear(),
+      }).sort({ month: 1 });
+
+      let totalEarning = 0;
+      const dataMap = [];
+      let monthlyEarning;
+
+      earnings.forEach((earning) => {
+        totalEarning += Number(earning.value);
+        if (earning.month === new Date().getMonth() + 1) {
+          monthlyEarning = earning.value;
+        }
+        dataMap.push({ month: earning.month, value: earning.value });
+      });
+
+      if (!monthlyEarning) {
+        monthlyEarning = 0;
+      }
+
+      res.render("admin/overall", {
+        pageTitle: "Overall",
+        path: "/admin/overall",
+        totalUser: numberOfUsers,
+        activeUserPercentage:
+          numberOfUsers > 0
+            ? (activeUserCount / numberOfUsers).toFixed(2) * 100
+            : 0,
+        premiumUsers: premiumUserCount,
+        freeUsers: numberOfUsers - premiumUserCount,
+        data: JSON.stringify(dataMap),
+        totalEarning: totalEarning.toLocaleString("vi-VN"),
+        monthlyEarning: monthlyEarning.toLocaleString("vi-VN"),
+      });
+    } catch (err) {
+      console.log(err);
+      // const error = new Error(err);
+      // error.httpStatusCode = 500;
+      // return next(error);
+    }
   },
 };
 

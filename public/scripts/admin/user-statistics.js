@@ -16,9 +16,23 @@ new Chart(loginCtx, {
         data: loginData, // array of number
         fill: false,
         borderColor: "rgb(75, 192, 192)",
-        tension: 1,
+        tension: 0,
       },
     ],
+  },
+  options: {
+    animation: {
+      duration: 1500,
+      easing: "easeInOutQuart",
+    },
+    scales: {
+      y: {
+        ticks: {
+          stepSize: 1,
+        },
+        beginAtZero: true,
+      },
+    },
   },
 });
 

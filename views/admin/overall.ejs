@@ -30,6 +30,7 @@
   <body id="page-top">
     <input type="hidden" id="premiumUsers" value="<%= premiumUsers %>" />
     <input type="hidden" id="freeUsers" value="<%= freeUsers %>" />
+    <input type="hidden" id="dataMap" value="<%= data %>" />
     <!-- Page Wrapper -->
     <div id="wrapper">
       <!-- End of Sidebar -->
@@ -64,7 +65,7 @@
                           Earnings (Monthly)
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                          $40,000
+                          <%= monthlyEarning %>VNĐ
                         </div>
                       </div>
                       <div class="col-auto">
@@ -87,7 +88,7 @@
                           Earnings (Annual)
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                          $215,000
+                          <%= totalEarning %>VNĐ
                         </div>
                       </div>
                       <div class="col-auto">
@@ -148,7 +149,7 @@
                         <div
                           class="text-xs font-weight-bold text-warning text-uppercase mb-1"
                         >
-                          Total User
+                          Total Users
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
                           <%= totalUser %>

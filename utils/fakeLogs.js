@@ -10,7 +10,12 @@ mongoose
   )
   .then(() => {
     (async () => {
-      await Earning.incEarning();
+      const earn = new Earning({
+        year: 2024,
+        month: 7,
+        value: 600000,
+      });
+      await earn.save();
     })();
   })
   .catch((err) => console.log(err));
