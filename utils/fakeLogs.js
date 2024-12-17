@@ -1,5 +1,6 @@
 import Log from "../models/log.js";
 import mongoose from "mongoose";
+import Earning from "../models/earning.js";
 
 const userId = "6755494388ab8211044bcecd";
 
@@ -9,14 +10,7 @@ mongoose
   )
   .then(() => {
     (async () => {
-      const newLog = new Log({
-        userId: userId,
-        year: 2025,
-        month: 1,
-        count: 12,
-      });
-      await newLog.save();
-      console.log("saved fake logs");
+      await Earning.incEarning();
     })();
   })
   .catch((err) => console.log(err));

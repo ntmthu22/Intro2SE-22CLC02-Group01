@@ -3,6 +3,7 @@
 import axios from "axios";
 import crypto from "crypto";
 import User from "../models/user.js";
+import Earning from "../models/earning.js";
 
 const paymentController = {
   postPayment: async (req, res, next) => {
@@ -109,8 +110,6 @@ const paymentController = {
     try {
       const user = await User.findById(userId);
 
-      console.log(user);
-
       if (!user) {
         return res.status(404).json({
           statusCode: 404,
@@ -121,6 +120,7 @@ const paymentController = {
 
       if (!req.body.resultCode) {
         await user.upgradeAccount();
+        await Earning.incEarning();
         console.log("Membership updated!");
       }
 

@@ -1,11 +1,12 @@
 import { validationResult } from "express-validator";
 import bcrypt from "bcryptjs";
 import { Client } from "@gradio/client";
-import { Blob } from "buffer"; // Built-in Node.js module for Blob
+import { Blob } from "buffer";
 import fs from "fs/promises";
 import Product from "../models/product.js";
 import Log from "../models/log.js";
 import { extractLocalDateAndTime, extractDateAndName } from "../utils/time.js";
+import { deleteFile } from "../utils/file.js";
 
 const ITEMS_PER_PAGE = 6;
 const PREVIEW_ITEMS = 2;
@@ -401,14 +402,18 @@ const userController = {
     const productId = req.params.productId;
 
     try {
-      const result = await Product.findByIdAndDelete(productId);
-      if (!result) {
+      const product = await Product.findById(productId);
+      if (!product) {
         return res
           .status(404)
-          .json({ message: "The process could not go through!" });
+          .json({ message: "Product not found!" });
       }
+      await Product.deleteOne({_id: productId, userId: req.user._id});
+
       req.user.products.pull(productId);
       await req.user.save();
+
+      deleteFile(product.originalImageUrl);
 
       return res.status(200).json({ message: "Deleted item successfully!" });
     } catch (err) {
