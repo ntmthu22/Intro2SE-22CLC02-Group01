@@ -9,3 +9,15 @@
   height: 100%;
   object-fit: cover;
 }
+
+.cl-1 {
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+}
+
+.cl-12 {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+}
+
+.cl-16 {
+  font-size: clamp(1.6rem, 5vw, 2rem);
+}
