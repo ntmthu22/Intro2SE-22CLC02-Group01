@@ -25,16 +25,23 @@ const giftcodeSchema = new mongoose.Schema(
   }
 );
 
-giftcodeSchema.methods.generateGiftcode = async function () {
-  const newCode = Array(10)
-    .fill(null)
-    .map(() => Math.random().toString(36).charAt(2).toUpperCase())
-    .join("");
+giftcodeSchema.statics.generateGiftcode = async function () {
+  let newCode;
 
-  this.code = newCode;
-  this.isRedeemed = false;
+  do {
+    newCode = Array(10)
+      .fill(null)
+      .map(() => Math.random().toString(36).charAt(2).toUpperCase())
+      .join("");
+  } while (await this.findOne({ code: newCode }));
 
-  await this.save();
+  const newGiftcode = new this({
+    code: newCode,
+    isRedeemed: false,
+  });
+
+  await newGiftcode.save();
+  return newGiftcode;
 };
 
 const Giftcode = mongoose.model("giftcode", giftcodeSchema);

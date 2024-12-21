@@ -1,0 +1,48 @@
+<%- include('../includes/general/head.ejs') %>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  </head>
+  <body>
+    <%- include('../includes/general/navbar.ejs') %>
+    <br/>
+
+    <div class="container mt-5">
+      <h2 class="my-3">Giftcodes <span class="badge badge-secondary"><%= totalItems %></span></h2>
+      <% if (giftcodes.length > 0) { %>
+      <table class="table table-bordered">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Code</th>
+            <th scope="col">Vadid Until</th>
+            <th scope="col">Redeemed</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% giftcodes.forEach((giftcode, index) => { %>
+          <tr>
+            <th scope="row"><%= index + start + 1 %></th>
+            <td><%= giftcode.code %></td>
+            <td><%= giftcode.validUntil %></td>
+            <td><span class="text-<%= giftcode.isRedeemed ? 'danger' : 'success' %>"><%= giftcode.isRedeemed ? 'Yes' : 'No' %></span></td>
+            <td><i class="fa fa-trash text-primary" aria-hidden="true"></i> <a data-code-id="<%= giftcode._id %>" class="delete-button" href="#">Delete</a></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% } else { %>
+      <div class="alert alert-info" role="alert">
+        Empty!
+      </div>
+      <% } %>
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <i class="fa-solid fa-hand-point-right text-primary"></i> <a id="generate-code" href="#">Generate New Giftcode!</a>
+        </div>
+      </div>
+      <%- include('../includes/pagination.ejs', {currentPage: currentPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage}) %>
+    </div>
+
+    <script src="/scripts/admin/giftcode.js"></script>
+  </body>
+</html>

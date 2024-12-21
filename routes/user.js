@@ -5,6 +5,7 @@ import User from "../models/user.js";
 import userController from "../controllers/user.js";
 import checkRole from "../middlewares/check-role.js";
 import checkMembership from "../middlewares/check-membership.js";
+import Giftcode from "../models/giftcode.js";
 
 const router = express.Router();
 
@@ -126,6 +127,32 @@ router.delete(
   "/delete-product/:productId",
   checkRole("user"),
   userController.deleteProduct
+);
+
+router.get("/giftcode", checkRole("user"), userController.getGiftcode);
+
+router.post(
+  "/giftcode",
+  checkRole("user"),
+  [
+    body("giftcode")
+      .trim()
+      .isLength({ min: 10, max: 10 })
+      .withMessage("Giftcode must be 10 characters long!")
+      .custom(async (value, {}) => {
+        const giftcodeDoc = await Giftcode.findOne({ code: value });
+        if (!giftcodeDoc) {
+          return Promise.reject("Giftcode not found!");
+        }
+        if (giftcodeDoc.validUntil < new Date()) {
+          return Promise.reject("Giftcode has expired!");
+        }
+        if (giftcodeDoc.isRedeemed) {
+          return Promise.reject("Giftcode has already been used!");
+        }
+      }),
+  ],
+  userController.postGiftcode
 );
 
 export default router;

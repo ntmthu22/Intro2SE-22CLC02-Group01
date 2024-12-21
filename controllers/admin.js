@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import User from "../models/user.js";
 import Log from "../models/log.js";
 import Product from "../models/product.js";
+import Giftcode from "../models/giftcode.js";
 import {
   extractLocalDateAndTime,
   extractLocalDate,
@@ -11,7 +12,8 @@ import {
 import Earning from "../models/earning.js";
 
 const USERS_PER_PAGE = 3;
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 2;
+const CODES_PER_PAGE = 8;
 
 const adminController = {
   getProfile: (req, res, next) => {
@@ -123,14 +125,16 @@ const adminController = {
     }
   },
   getManage: async (req, res, next) => {
-    const page = +req.query.page || 1;
+    const page = Math.max(+req.query.page || 1, 1);
     let totalUsers;
+    let lastPage;
 
     try {
       totalUsers = await User.find({ role: { $ne: "Admin" } }).countDocuments();
+      lastPage = totalUsers > 0 ? Math.ceil(totalUsers / USERS_PER_PAGE) : 1;
 
-      if (page > Math.ceil(totalUsers / USERS_PER_PAGE) || page < 1) {
-        return res.redirect(`/admin/users?page=${Math.max(page - 1, 1)}`);
+      if (page > lastPage) {
+        return res.redirect(`/admin/users?page=${lastPage}`);
       }
 
       const users = await User.find({ role: { $ne: "Admin" } })
@@ -146,7 +150,7 @@ const adminController = {
         hasPreviousPage: page > 1,
         nextPage: page + 1,
         previousPage: page - 1,
-        lastPage: Math.ceil(totalUsers / USERS_PER_PAGE),
+        lastPage: lastPage,
       });
     } catch (err) {
       const error = new Error(err.message || "Internal server error");
@@ -307,49 +311,48 @@ const adminController = {
       return next(err);
     }
   },
-  getUserAlbum: (req, res, next) => {
+  getUserAlbum: async (req, res, next) => {
     const userId = req.params.userId;
     const username = req.query.username;
-    const page = +req.query.page || 1;
+    const page = Math.max(+req.query.page || 1, 1);
+    let lastPage;
+    try {
+      const totalItems = await Product.find({
+        userId: userId,
+      }).countDocuments();
+      lastPage = totalItems > 0 ? Math.ceil(totalItems / ITEMS_PER_PAGE) : 1;
+      if (page > lastPage) {
+        return res.redirect(`/admin/users/${userId}/album?page=${lastPage}`);
+      }
+      const products = await Product.find({ userId: userId })
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * ITEMS_PER_PAGE)
+        .limit(ITEMS_PER_PAGE);
+      let updatedProducts = JSON.parse(JSON.stringify(products));
 
-    let totalItems;
-
-    Product.find({ userId: userId })
-      .countDocuments()
-      .then((numProducts) => {
-        totalItems = numProducts;
-        return Product.find({ userId: userId })
-          .sort({ createdAt: -1 })
-          .skip((page - 1) * ITEMS_PER_PAGE)
-          .limit(ITEMS_PER_PAGE);
-      })
-      .then((products) => {
-        let updatedProducts = JSON.parse(JSON.stringify(products));
-
-        updatedProducts = updatedProducts.map((product) => {
-          product.dateAndName = extractDateAndName(product.originalImageUrl);
-          return product;
-        });
-
-        res.render("album/product-list", {
-          pageTitle: `User Album`,
-          path: `/admin/users/${userId}/album`,
-          username: username,
-          prods: updatedProducts,
-          currentPage: page,
-          hasNextPage: ITEMS_PER_PAGE * page < totalItems,
-          hasPreviousPage: page > 1,
-          nextPage: page + 1,
-          previousPage: page - 1,
-          lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
-          viewAsAdmin: true,
-        });
-      })
-      .catch((err) => {
-        const error = new Error(err);
-        error.httpStatusCode = 500;
-        return next(error);
+      updatedProducts = updatedProducts.map((product) => {
+        product.dateAndName = extractDateAndName(product.originalImageUrl);
+        return product;
       });
+
+      res.render("album/product-list", {
+        pageTitle: `User Album`,
+        path: `/admin/users/${userId}/album`,
+        username: username,
+        prods: updatedProducts,
+        currentPage: page,
+        hasNextPage: ITEMS_PER_PAGE * page < totalItems,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: Math.ceil(totalItems / ITEMS_PER_PAGE),
+        viewAsAdmin: true,
+      });
+    } catch (err) {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    }
   },
   getUserProduct: (req, res, next) => {
     const { productId } = req.params;
@@ -373,7 +376,6 @@ const adminController = {
         return next(error);
       });
   },
-  getRecent: async (req, res, next) => {},
   getOverall: async (req, res, next) => {
     try {
       const allUsers = await User.find({ role: { $ne: "Admin" } });
@@ -426,6 +428,54 @@ const adminController = {
       const error = new Error(err);
       error.httpStatusCode = 500;
       return next(error);
+    }
+  },
+  getGiftcodes: async (req, res, next) => {
+    const page = Math.max(+req.query.page || 1, 1);
+    let lastPage;
+    try {
+      const totalItems = await Giftcode.find().countDocuments();
+      lastPage = totalItems > 0 ? Math.ceil(totalItems / CODES_PER_PAGE) : 1;
+      if (page > lastPage) {
+        return res.redirect(`/admin/giftcodes?page=${lastPage}`);
+      }
+      const giftcodes = await Giftcode.find()
+        .skip((page - 1) * CODES_PER_PAGE)
+        .limit(CODES_PER_PAGE);
+      res.render("admin/giftcodes", {
+        pageTitle: "Generate Giftcode",
+        path: "/admin/giftcodes",
+        giftcodes: giftcodes,
+        totalItems: totalItems,
+        currentPage: page,
+        hasNextPage: CODES_PER_PAGE * page < totalItems,
+        hasPreviousPage: page > 1,
+        nextPage: page + 1,
+        previousPage: page - 1,
+        lastPage: lastPage,
+        start: (page - 1) * CODES_PER_PAGE,
+      });
+    } catch (err) {
+      const error = new Error(err);
+      error.httpStatusCode = 500;
+      return next(error);
+    }
+  },
+  postGenerateGiftcode: async (req, res, next) => {
+    try {
+      await Giftcode.generateGiftcode();
+      return res.status(200).json({ message: "Giftcode generated!" });
+    } catch (err) {
+      return res.status(500).json({ message: "Internal server error." });
+    }
+  },
+  deleteGiftcode: async (req, res, next) => {
+    const giftcodeId = req.query.id;
+    try {
+      await Giftcode.findByIdAndDelete(giftcodeId);
+      return res.status(200).json({ message: "Giftcode deleted!" });
+    } catch (err) {
+      return res.status(500).json({ message: "Internal server error." });
     }
   },
 };

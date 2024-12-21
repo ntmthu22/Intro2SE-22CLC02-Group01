@@ -48,13 +48,17 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
+userSchema.methods.downgrade = async function () {
+  this.membershipType = "Free";
+  this.validUntil = undefined;
+  await this.save();
+};
+
 userSchema.methods.checkMembershipStatus = async function () {
   if (this.membershipType === "Premium" && this.validUntil) {
     const now = new Date();
     if (now > this.validUntil) {
-      this.membershipType = "Free";
-      this.validUntil = undefined;
-      await this.save();
+      await this.downgrade();
     }
   }
 };

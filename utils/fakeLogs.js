@@ -1,8 +1,9 @@
 import Log from "../models/log.js";
 import mongoose from "mongoose";
 import Earning from "../models/earning.js";
+import User from "../models/user.js";
 
-const userId = "6755494388ab8211044bcecd";
+const userId = "6758b8d0345de69e1d5c2029";
 
 mongoose
   .connect(
@@ -10,12 +11,9 @@ mongoose
   )
   .then(() => {
     (async () => {
-      const earn = new Earning({
-        year: 2024,
-        month: 7,
-        value: 600000,
-      });
-      await earn.save();
+      const user = await User.findById(userId);
+
+      await user.checkMembershipStatus();
     })();
   })
   .catch((err) => console.log(err));

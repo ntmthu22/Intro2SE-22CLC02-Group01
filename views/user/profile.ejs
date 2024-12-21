@@ -23,7 +23,7 @@
                     <form class="text-center" id="membership-form" method="POST" action="/payment">
                       <button type="submit" style="border: none" class="dropdown-item">Via Momo</button>
                     </form>
-                    <a class="dropdown-item text-center" href="/user/gift-code">Via Giftcode</a>
+                    <a class="dropdown-item text-center" href="/user/giftcode">Via Giftcode</a>
                   </div>
                 </div>
                 <% } %>
@@ -120,5 +120,14 @@
         </div>
       </div>
     </section>
+    <% if (successMessage) { %>
+      <script>
+        Swal.fire({
+          title: "Success!",
+          text: "<%= successMessage %>",
+          icon: "success"
+        });
+      </script>
+    <% } %>
   </body>
 </html>

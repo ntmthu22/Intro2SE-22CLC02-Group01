@@ -70,22 +70,54 @@ router.post(
   adminController.postEditProfilePassword
 );
 
-router.get("/users", adminController.getManage);
+router.get("/users", checkRole("admin"), adminController.getManage);
 
-router.post("/users/:userId/disable", adminController.disableAccount);
+router.post(
+  "/users/:userId/disable",
+  checkRole("admin"),
+  adminController.disableAccount
+);
 
-router.post("/users/:userId/restore", adminController.restoreAccount);
+router.post(
+  "/users/:userId/restore",
+  checkRole("admin"),
+  adminController.restoreAccount
+);
 
-router.get("/users/:userId", adminController.getUserDetail);
+router.get("/users/:userId", checkRole("admin"), adminController.getUserDetail);
 
-router.get("/users/:userId/activities", adminController.getUserActivities);
+router.get(
+  "/users/:userId/activities",
+  checkRole("admin"),
+  adminController.getUserActivities
+);
 
-router.get("/users/:userId/album", adminController.getUserAlbum);
+router.get(
+  "/users/:userId/album",
+  checkRole("admin"),
+  adminController.getUserAlbum
+);
 
-router.get("/user-product/:productId", adminController.getUserProduct);
+router.get(
+  "/user-product/:productId",
+  checkRole("admin"),
+  adminController.getUserProduct
+);
 
-router.get("/recent-activities", adminController.getRecent);
+router.get("/overall", checkRole("admin"), adminController.getOverall);
 
-router.get("/overall", adminController.getOverall);
+router.get("/giftcodes", checkRole("admin"), adminController.getGiftcodes);
+
+router.post(
+  "/generate-giftcode",
+  checkRole("admin"),
+  adminController.postGenerateGiftcode
+);
+
+router.delete(
+  "/delete-giftcode",
+  checkRole("admin"),
+  adminController.deleteGiftcode
+);
 
 export default router;
