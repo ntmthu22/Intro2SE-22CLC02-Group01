@@ -12,7 +12,7 @@ import {
 import Earning from "../models/earning.js";
 
 const USERS_PER_PAGE = 3;
-const ITEMS_PER_PAGE = 2;
+const ITEMS_PER_PAGE = 6;
 const CODES_PER_PAGE = 8;
 
 const adminController = {
