@@ -1,5 +1,3 @@
-//https://developers.momo.vn/#/docs/en/aiov2/?id=payment-method
-//parameters
 import axios from "axios";
 import crypto from "crypto";
 import User from "../models/user.js";
@@ -27,8 +25,6 @@ const paymentController = {
     var autoCapture = true;
     var lang = "vi";
 
-    //before sign HMAC SHA256 with format
-    //accessKey=$accessKey&amount=$amount&extraData=$extraData&ipnUrl=$ipnUrl&orderId=$orderId&orderInfo=$orderInfo&partnerCode=$partnerCode&redirectUrl=$redirectUrl&requestId=$requestId&requestType=$requestType
     var rawSignature =
       "accessKey=" +
       process.env.accessKey +
