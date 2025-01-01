@@ -1,0 +1,68 @@
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+  <a class="navbar-brand" href="/">PIC2MODEL</a>
+  <button
+    class="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#collapsibleNavbar"
+  >
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="collapsibleNavbar">
+    <ul class="navbar-nav ml-auto">
+      <% if (role === 'User') { %>
+      <li class="nav-item <%= path === '/user/generate' ? 'active' : '' %>">
+        <a class="nav-link" href="/user/generate">GENERATE</a>
+      </li>
+      <% } else if (role === 'Admin' ) { %>
+      <li class="nav-item <%= path === '/admin/users' ? 'active' : '' %>">
+        <a class="nav-link" href="/admin/users">MANAGE</a>
+      </li>
+      <li class="nav-item <%= path === '/admin/giftcodes' ? 'active' : '' %>">
+        <a class="nav-link" href="/admin/giftcodes">GIFTCODES</a>
+      </li>
+      <li class="nav-item <%= path === '/admin/overall' ? 'active' : '' %>">
+        <a class="nav-link" href="/admin/overall">OVERALL</a>
+      </li>
+      <% } %> <% if (role !== 'Admin') { %>
+      <li class="nav-item <%= path === '/samples' ? 'active' : '' %>">
+        <a class="nav-link" href="/samples">SAMPLES</a>
+      </li>
+      <li class="nav-item <%= path === '/testimonials' ? 'active' : '' %>">
+        <a class="nav-link" href="/testimonials">TESTIMONIALS</a>
+      </li>
+      <li class="nav-item <%= path === '/about' ? 'active' : '' %>">
+        <a class="nav-link" href="/about">ABOUT</a>
+      </li>
+      <% } %> <% if (!isAuthenticated) { %>
+      <li class="nav-item">
+        <a class="nav-link" href="/login">JOIN NOW</a>
+      </li>
+      <% } else { %>
+      <div>
+        <button
+          type="button"
+          class="nav-link dropdown-toggle"
+          data-toggle="dropdown"
+          aria-expanded="false"
+          style="border: none; background: none"
+        >
+          PROFILE
+        </button>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="/<%= role %>/profile">View profile</a>
+          <a class="dropdown-item" href="/<%= role %>/edit-profile"
+            >Edit profile</a
+          >
+          <div class="dropdown-divider"></div>
+          <form action="/logout" method="POST" id="logout-form">
+            <button type="submit" style="border: none" class="dropdown-item">
+              Log out
+            </button>
+          </form>
+        </div>
+      </div>
+      <% } %>
+    </ul>
+  </div>
+</nav>

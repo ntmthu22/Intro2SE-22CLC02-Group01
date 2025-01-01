@@ -1,0 +1,123 @@
+  <%- include('../includes/general/head.ejs') %>
+  <style>
+    .nav-link {
+      cursor: pointer;
+    }
+  </style>
+  </head>
+  <body>
+    <%- include('../includes/general/navbar.ejs') %>
+    <section class="mt-5" style="background-color: white;">
+      <div class="container py-5">
+        <div class="row">
+          <div class="col-lg-4">
+            <div class="card mb-4">
+              <div class="card-body text-center">
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava6.webp" alt="avatar"
+                  class="rounded-circle img-fluid" style="width: 150px;">
+                <h5 class="my-3"><%= user.name %></h5>
+                <!-- <p class="text-muted mb-1">Full Stack Developer</p> -->
+                <p class="text-muted mb-4">Full Access</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="card mb-4">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Full Name</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0"><%= user.name %></p>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Email</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0"><%= user.email %></p>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Access</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0">Full Access</p>
+                  </div>
+                </div>
+                <hr>
+                <% if (user.membershipType === 'Premium') { %>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Expiration Date</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0"><%= validUntil %></p>
+                  </div>
+                </div>
+                <hr>
+                <% } %>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <p class="mb-0">Role</p>
+                  </div>
+                  <div class="col-sm-9">
+                    <p class="text-muted mb-0"><%= user.role %></p>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-3">
+                    <form action="/admin/edit-profile" method="GET">
+                      <button type="submit" class="btn btn-outline-primary">Edit Account</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card text-center">
+              <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs">
+                  <li class="nav-item">
+                    <a id="nav-link-1" class="nav-link active" data-card-id="1">Account Management</a>
+                  </li>
+                  <li class="nav-item">
+                    <a id="nav-link-2" class="nav-link" data-card-id="2">Giftcodes Management</a>
+                  </li>
+                  <li class="nav-item">
+                    <a id="nav-link-3" class="nav-link" data-card-id="3">Overall Analytics</a>
+                  </li>
+                </ul>
+              </div>
+              <div class="card-body paragraph" id="card-1">
+                <h5 class="card-title">Manage Accounts</h5>
+                <p class="card-text">View user activies, products, or suspend suspicious accounts</p>
+                <a href="/admin/users" class="btn btn-primary">Go to manage page</a>
+              </div>
+              <div class="card-body paragraph d-none" id="card-2">
+                <h5 class="card-title">Manage Giftcodes</h5>
+                <p class="card-text">View all existing gift codes, generate new ones, or remove unused codes</p>
+                <a href="/admin/giftcodes" class="btn btn-primary">Go to giftcodes page</a>
+              </div>
+              <div class="card-body paragraph d-none" id="card-3">
+                <h5 class="card-title">Overall activities</h5>
+                <p class="card-text">Summary of the platform’s earnings for the past 6 months, total user count, distribution of user types, and more</p>
+                <a href="/admin/overall" class="btn btn-primary">Go to analytics</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script src="/scripts/admin/card-manip.js"></script>
+  </body>
+</html>
