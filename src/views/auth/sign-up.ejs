@@ -1,0 +1,85 @@
+<%- include('../includes/auth/head.ejs') %>
+
+<div class="wrapper">
+  <h1>Sign Up</h1>
+  <form action="/signup" method="POST">
+    <div>
+      <label
+        class="<%= validationErrors.find(e => e.path === 'name') ? 'invalid' : '' %>"
+        for="name"
+      >
+        <%- include('../icons/person.svg') %>
+      </label>
+      <input
+        class="<%= validationErrors.find(e => e.path === 'name') ? 'invalid' : '' %>"
+        type="text"
+        id="name"
+        name="name"
+        value="<%= oldInput.name %>"
+        placeholder="Full Name"
+        required
+      />
+    </div>
+    <div>
+      <label
+        class="<%= validationErrors.find(e => e.path === 'email') ? 'invalid' : '' %>"
+        for="email"
+      >
+        <%- include('../icons/mail.svg') %>
+      </label>
+      <input
+        class="<%= validationErrors.find(e => e.path === 'email') ? 'invalid' : '' %>"
+        type="email"
+        id="email"
+        name="email"
+        value="<%= oldInput.email %>"
+        placeholder="Email"
+        required
+      />
+    </div>
+    <div>
+      <label
+        class="<%= validationErrors.find(e => e.path === 'password') ? 'invalid' : '' %>"
+        for="password"
+      >
+        <%- include('../icons/lock.svg') %>
+      </label>
+      <input
+        class="<%= validationErrors.find(e => e.path === 'password') ? 'invalid' : '' %>"
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Password"
+        value="<%= oldInput.password %>"
+        required
+      />
+    </div>
+    <div>
+      <label
+        class="<%= validationErrors.find(e => e.path === 'confirmPassword') ? 'invalid' : '' %>"
+        for="password-confirmation"
+      >
+        <%- include('../icons/lock.svg') %>
+      </label>
+      <input
+        class="<%= validationErrors.find(e => e.path === 'confirmPassword') ? 'invalid' : '' %>"
+        type="password"
+        id="password-confirmation"
+        name="confirmPassword"
+        value="<%= oldInput.confirmPassword %>"
+        placeholder="Confirm password"
+        required
+      />
+    </div>
+    <%- include('../includes/auth/error-message.ejs') %>
+    <button type="submit">Sign Up</button>
+  </form>
+  <div class="links">
+    <p>
+      Already have an account?
+      <a href="/login" id="login-link" class="link">Log in</a>
+    </p>
+  </div>
+</div>
+
+<%- include('../includes/auth/end.ejs') %>

@@ -1,0 +1,28 @@
+<%- include('../includes/general/head.ejs') %>
+</head>
+  <body>
+    <%- include('../includes/general/navbar.ejs') %>
+    
+    <section class="container mt-5 py-5 d-flex align-items-center justify-content-center">
+      <div class="card position-relative" style="width: 24rem;">
+
+        <a href="/admin/edit-profile" class="position-absolute" style="top:5px;left:5px;background:none;border:none">
+          <%- include('../icons/arrow_left.svg') %>
+        </a>
+        
+        <form class="pt-5 p-3" action="/admin/edit-profile/name" method="POST">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="hidden" id="originalName" value="<%= originalName %>">
+            <input type="text" class="form-control
+            <%= validationErrors.find(e => e.path === 'name') ? 'is-invalid' : '' %>" name="name" id="name" aria-describedby="nameHelp" value="<%= username %>" placeholder="Enter new name">
+            <small id="nameHelp" class="form-text text-muted"><%= errorMessage ? errorMessage : 'A name that makes sense would be nice.' %></small>
+          </div>
+          <button type="submit" disabled class="btn btn-primary btn-lg btn-block">Submit</button>
+        </form>
+      </div>
+    </section>
+    
+    <script src="/scripts/user/edit-name.js"></script>
+  </body>
+</html>
