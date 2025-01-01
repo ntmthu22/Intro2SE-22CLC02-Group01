@@ -1,0 +1,82 @@
+<%- include('../includes/general/head.ejs') %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+      .list-group-item {
+        border: none; /* Remove the border */
+        padding-left: 0.5rem; /* Optional: Align the text with the card body */
+        padding-right: 0.5rem; /* Optional: Align the text with the card body */
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../includes/general/navbar.ejs') %>
+    <section style="background-color: white; margin-top: 6rem">
+      <div class="container my-4 w-100" >
+        <div class="card mb-3">
+          <div class="row no-gutters">
+            <div class="col-md-4 w-100" >
+              <img class="img-fluid w-100 h-100" style="object-fit: cover" src="/<%= product.originalImageUrl %>">
+            </div>
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">Filename: <span class="text-info"><%= name %></span></h5>
+                <h6 class="card-text">By <strong><%= username %></strong></h6>
+                <hr>
+                <ul class="list-group" style="border: none;">
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>Elevation</span>
+                    <span class="badge badge-primary badge-pill"><%= product.inputs.elevation %></span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>Inference Steps</span>
+                    <span class="badge badge-primary badge-pill"><%= product.inputs.inferenceSteps %></span>
+                  </li>
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>Random Seed</span>
+                    <span class="badge badge-primary badge-pill"><%= product.inputs.randomSeed %></span>
+                  </li>
+                  <li class="list-group-item align-items-center">
+                    <div class="row">
+                      <div class="col-md-3">Prompt</div>
+                      <div class="col-md-9 text-right text-muted"><small class="text-info"><%= product.inputs.promptInput ? product.inputs.promptInput : 'undefined' %></small></div>
+                    </div>
+                  </li>
+                  <li class="list-group-item align-items-center">
+                    <div class="row">
+                      <div class="col-md-3">Negative Prompt</div>
+                      <div class="col-md-9 text-right text-muted"><small class="text-info"><%= product.inputs.negativePromptInput ? product.inputs.negativePromptInput : 'undefined' %></small></div>
+                    </div>
+                  </li>
+                </ul>
+                <hr>
+                <p class="card-text">Status: <span class="text-<%= product.status === 'success' ? 'success' : 'danger' %>"><%= product.status %></span></p>
+                <hr>
+                <p class="card-text text-right"><span class="text-muted">Created on <%= date %></span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <% if (product.status === 'success') { %>
+        <div class="w-100 d-flex justify-content-center">
+          <figure class="text-center">
+            <img src="<%= product.convertedImageUrl %>">
+            <figcaption class="mt-2 text-muted">Output as viewed from four different angles.</figcaption>
+          </figure>
+        </div>
+
+        <div class="w-100 d-flex justify-content-center">
+          <figure class="text-center">
+            <video controls>
+              <source src="<%= product.videoUrl %>" type="video/mp4">
+            </video>
+            <figcaption class="mt-2 text-muted">Download your model <a href="<%= product.plyUrl %>">here</a></figcaption>
+          </figure>
+        </div>
+        <% } %>
+      </div>
+    </section>
+  </body>
+</html>

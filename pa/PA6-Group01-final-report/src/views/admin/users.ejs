@@ -1,0 +1,70 @@
+<%- include('../includes/general/head.ejs') %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+<link rel="stylesheet" href="/css/users.css">
+</head>
+<body>
+  <%- include('../includes/general/navbar.ejs') %>
+  <section class="mt-5" style="background-color: white;">
+    <% if (users.length > 0) { %>
+    <div class="container py-5">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="user-dashboard-info-box table-responsive mb-0 bg-white p-4 shadow-sm">
+            <table class="table manage-candidates-top mb-0">
+              <thead>
+                <tr>
+                  <th>User Information</th>
+                  <th class="text-center">Status</th>
+                  <th class="action text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% for (const user of users) { %>
+                <tr class="candidates-list">
+                  <td class="title">
+                    <div class="thumb">
+                      <img class="img-fluid" src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="userpfp">
+                    </div>
+                    <div class="candidate-list-details">
+                      <div class="candidate-list-info">
+                        <div class="candidate-list-title">
+                          <h5 class="mb-0"><a href="/admin/users/<%= user._id %>"><%= user.name %></a></h5>
+                        </div>
+                        <div class="candidate-list-option">
+                          <ul class="list-unstyled">
+                            <li><%= user.membershipType %> Account</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="candidate-list-favourite-time text-center">
+                    <span class="candidate-list-time order-1 text-<%= user.status === 'active' ? 'success' : 'danger' %>"><%= user.status %></span>
+                  </td>
+                  <td>
+                    <ul class="list-unstyled mb-0 d-flex justify-content-end">
+                      <% if (user.status === 'active') { %>
+                      <li><a href="#" class="text-danger" data-toggle="tooltip"><i data-user-id="<%= user._id %>" class="fa fa-ban"></i></a></li>
+                      <% } else { %>
+                      <li><a href="#" class="text-primary" data-toggle="tooltip"><i data-user-id="<%= user._id %>" class="fas fa-undo"></i></a></li>
+                      <% } %>
+                    </ul>
+                  </td>
+                </tr>
+                <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <%- include('../includes/pagination.ejs', {currentPage: currentPage, hasNextPage: hasNextPage, hasPreviousPage: hasPreviousPage, nextPage: nextPage, previousPage: previousPage, lastPage: lastPage}) %>
+    <% } else { %>
+    <div class="container py-5 d-flex align-items-center justify-content-center">
+      <h2>It's so empty. Wait til someone signs up! :)</h2>
+    </div>
+    <% } %>
+  </section>
+  <script src="/scripts/admin/manage-users.js"></script>
+</body>
+</html>

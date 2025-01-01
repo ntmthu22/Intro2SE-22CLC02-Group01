@@ -1,0 +1,36 @@
+{
+  "type": "module",
+  "name": "nmcnpm",
+  "version": "1.0.0",
+  "main": "script.js",
+  "engines": {
+    "node": "20.18.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "HEROKU_APP_URL=http://localhost:3000 accessKey=F8BBA842ECF85 secretKey=K951B6PE1waDMi640xX08PD3vg6EkVlz NODE_ENV=production MONGO_USER=ptbtin22 MONGO_PASSWORD=i6k2WrR2Rhr9AbcS MONGO_DATABASE=imgconverter SENDGRID_API=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 node app.js",
+    "dev": "nodemon app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@gradio/client": "^1.8.0",
+    "axios": "^1.7.8",
+    "bcryptjs": "^2.4.3",
+    "compression": "^1.7.5",
+    "connect-flash": "^0.1.1",
+    "connect-mongodb-session": "^5.0.0",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "express-session": "^1.18.1",
+    "express-validator": "^7.2.0",
+    "mongoose": "^8.7.3",
+    "multer": "^1.4.5-lts.1",
+    "nodemailer": "^6.9.16",
+    "nodemailer-sendgrid-transport": "^0.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}

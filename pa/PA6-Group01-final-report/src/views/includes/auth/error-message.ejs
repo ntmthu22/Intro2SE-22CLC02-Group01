@@ -1,0 +1,9 @@
+<% if (errorMessage) { %>
+<script>
+  Swal.fire({
+    title: "Warning!",
+    text: "<%= errorMessage %>",
+    icon: "warning"
+  });
+</script>
+<% } %>
