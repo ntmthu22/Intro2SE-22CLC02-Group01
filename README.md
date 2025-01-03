@@ -22,9 +22,10 @@
 
 ## Install and run instruction
 
-1. In the project folder, run **npm install** to install dependencies
-2. To start the project locally, run **npm run dev** in terminal
-3. Or use the deployed version here: https://pic2model-e0bcecc6ad3b.herokuapp.com
+1. Navigate to **src** folder using **cd src**
+2. In the project folder, run **npm install** to install dependencies
+3. To start the project locally, run **npm start** in terminal
+4. Or use the deployed version here: https://pic2model-e0bcecc6ad3b.herokuapp.com
 
 ## About the project
 
