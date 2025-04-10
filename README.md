@@ -26,6 +26,7 @@
 2. In the project folder, run **npm install** to install dependencies
 3. To start the project locally, run **npm start** in terminal
 4. Or use the deployed version here: https://pic2model.onrender.com
+5. To interact as Admin, use the following credentials: admin2@gmail.com / admin123
 
 ## About the project
 
