@@ -25,7 +25,7 @@
 1. Navigate to **src** folder using **cd src**
 2. In the project folder, run **npm install** to install dependencies
 3. To start the project locally, run **npm start** in terminal
-4. Or use the deployed version here: https://pic2model-e0bcecc6ad3b.herokuapp.com
+4. Or use the deployed version here: https://pic2model.onrender.com
 
 ## About the project
 
@@ -44,7 +44,7 @@
   - **Template engine**: EJS
   - **Backend**: NodeJS
   - **Database**: MongoDB
-  - **Deployment**: Heroku
+  - **Deployment**: Render
 - **References**:
   - [Bootstrap 4.6 Documentation](https://getbootstrap.com/docs/4.6/components)
   - [Bootstrap 4 Tutorial by W3Schools](https://www.w3schools.com/bootstrap4/)
@@ -52,4 +52,4 @@
   - [Themes and Templates by StartBootstrap](https://startbootstrap.com/)
   - [MongoDB Documentation](https://docs.mongodb.com/)
   - [NodeJS Documentation](https://nodejs.org/en/docs/)
-  - [Heroku Documentation](https://devcenter.heroku.com/categories/reference)
+  - [Render Documentation](https://render.com/docs)
