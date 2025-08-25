@@ -6,27 +6,9 @@
 - Course name (English): **Introduction to Software Engineering**
 - Course name (Vietnamese): **Nhập môn công nghệ phần mềm**
 
-## Group Information
+## 🚀 Project Demo
 
-- Class ID: **22CLC02**
-- Group ID: **1**
-- Group members:
-
-| Student ID | Full name            | Email                      |
-| :--------: | -------------------- | -------------------------- |
-|  22127403  | Nguyễn Trần Minh Thư | ntmthu22@clc.fitus.edu.vn  |
-|  22127113  | Nguyễn Hữu Gia Hiếu  | nhghieu22@clc.fitus.edu.vn |
-|  22127487  | Phạm Trịnh Bảo Tín   | ptbtin22@clc.fitus.edu.vn  |
-|  21127739  | Vũ Minh Phát         | vmphat21@clc.fitus.edu.vn  |
-|  20127672  | Vũ Mạnh Quân         | vmquan20@clc.fitus.edu.vn  |
-
-## Install and run instruction
-
-1. Navigate to **src** folder using **cd src**
-2. In the project folder, run **npm install** to install dependencies
-3. To start the project locally, run **npm start** in terminal
-4. Or use the deployed version here: https://pic2model.onrender.com
-5. To interact as Admin, use the following credentials: admin2@gmail.com / admin123
+[![Watch the demo](https://img.youtube.com/vi/GpSXSyZ_uCs/maxresdefault.jpg)](https://youtube.com/playlist?list=PLEJW8FxF3lU3ItcDX8d-2l1_GeNmpG5MU&si=BnfzPuV1FCqdaeoX)
 
 ## About the project
 
@@ -54,3 +36,25 @@
   - [MongoDB Documentation](https://docs.mongodb.com/)
   - [NodeJS Documentation](https://nodejs.org/en/docs/)
   - [Render Documentation](https://render.com/docs)
+
+## Group Information
+
+- Class ID: **22CLC02**
+- Group ID: **1**
+- Group members:
+
+| Student ID | Full name            | Email                      |
+| :--------: | -------------------- | -------------------------- |
+|  22127403  | Nguyễn Trần Minh Thư | ntmthu22@clc.fitus.edu.vn  |
+|  22127113  | Nguyễn Hữu Gia Hiếu  | nhghieu22@clc.fitus.edu.vn |
+|  22127487  | Phạm Trịnh Bảo Tín   | ptbtin22@clc.fitus.edu.vn  |
+|  21127739  | Vũ Minh Phát         | vmphat21@clc.fitus.edu.vn  |
+|  20127672  | Vũ Mạnh Quân         | vmquan20@clc.fitus.edu.vn  |
+
+## Install and run instruction
+
+1. Navigate to **src** folder using **cd src**
+2. In the project folder, run **npm install** to install dependencies
+3. To start the project locally, run **npm start** in terminal
+4. Or use the deployed version here: https://pic2model.onrender.com
+5. To interact as Admin, use the following credentials: admin2@gmail.com / admin123
