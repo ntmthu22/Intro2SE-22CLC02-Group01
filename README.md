@@ -7,6 +7,7 @@
 - Course name (Vietnamese): **Nhập môn công nghệ phần mềm**
 
 ## 🚀 Project Demo
+Click the image below or [watch on YouTube](https://youtube.com/playlist?list=PLEJW8FxF3lU3ItcDX8d-2l1_GeNmpG5MU&si=BnfzPuV1FCqdaeoX)!
 
 [![Watch the demo](https://img.youtube.com/vi/GpSXSyZ_uCs/maxresdefault.jpg)](https://youtube.com/playlist?list=PLEJW8FxF3lU3ItcDX8d-2l1_GeNmpG5MU&si=BnfzPuV1FCqdaeoX)
 
